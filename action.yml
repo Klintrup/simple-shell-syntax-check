@@ -21,7 +21,7 @@ runs:
             ;;
             *)
               echo "Unsupported shell: ${shell}"
-              echo "| `${file}` | `${shell}` | :no_entry: | Unsupported shell |" >> $GITHUB_STEP_SUMMARY
+              echo "| \`${file}\` | \`${shell}\` | :no_entry: | Unsupported shell |" >> $GITHUB_STEP_SUMMARY
               exit 1
               ;;
           esac
@@ -32,7 +32,7 @@ runs:
             echo "| \`${file}\` | \`${shell}\` | :white_check_mark: | |" >> $GITHUB_STEP_SUMMARY
           else
             echo "${file} check FAIL with ${shell}"
-            echo "| `${file}` | `${shell}` | :no_entry: | see run log |" >> $GITHUB_STEP_SUMMARY
+            echo "| \`${file}\` | \`${shell}\` | :no_entry: | see run log |" >> $GITHUB_STEP_SUMMARY
             exit ${syntaxexitcode}
           fi
           echo "::endgroup::"
