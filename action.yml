@@ -7,6 +7,7 @@ runs:
   using: "composite"
   steps:
     - name: Verify script syntax
+      shell: bash
       run: |
         for file in $(find . -type f -name '*.sh'); do
           echo "::group::${file}"
