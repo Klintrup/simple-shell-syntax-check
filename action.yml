@@ -1,0 +1,32 @@
+
+name: "simple-shell-syntax-check"
+author: "Søren Klintrup <soren@klintrup.dk>"
+description: "Uses shell '-n' to syntax check shellscripts"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Verify script syntax
+      run: |
+        for file in $(find . -type f -name '*.sh'); do
+          echo "::group::${file}"
+          echo "Checking ${file}"
+          shell=$(head -n 1 "${file}" | awk 'BEGIN{FS="/"} /^#!\/usr\/bin\/env/{split($NF,a," "); print a[2]; exit} /^#!\//{print $NF; exit}')
+          # use case to verify that shell variable is a supported shell
+          case ${shell} in
+            bash|sh)
+            *)
+              echo ":no_entry: Unsupported shell: ${shell}"
+              exit 1
+              ;;
+          esac
+          ${shell} -n "${file}"
+          syntaxexitcode=${?}
+          if [ ${syntaxexitcode} -eq 0 ]; then
+            echo ":white_check_mark: ${file} check OK with ${shell}"
+          else
+          echo ":no_entry: ${file} check FAIL with ${shell}"
+            exit ${syntaxexitcode}
+          fi
+          echo "::endgroup::"
+        done
