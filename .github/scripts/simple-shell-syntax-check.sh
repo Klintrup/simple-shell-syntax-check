@@ -16,7 +16,7 @@ check_shell_syntax() {
   else
     echo "${file} check FAIL with ${shell}"
     echo "| \`${file}\` | \`${shell}\` | :no_entry: | see run log |" >> "${GITHUB_STEP_SUMMARY}"
-    let errors++
+    ((errors++))
   fi
 }
 
@@ -33,8 +33,11 @@ is_shell_available() {
   return 1
 }
 
+declare -a files
 if [ "${#}" -eq "0" ]; then
-  files=$(find . -type f -name "*.sh" -exec realpath --relative-to=. {} \;)
+  while IFS= read -r line; do
+      files+=("${line}")
+  done < <(find . -type f -name "*.sh" -exec realpath --relative-to=. {} \;)
 else
   files=("$@")
 fi
@@ -43,10 +46,10 @@ errors=0
 warnings=0
 
 for file in "${files[@]}"; do
+  # shellcheck disable=SC2129
   echo "" >> "${GITHUB_STEP_SUMMARY}"
   echo "# Checked files" >> "${GITHUB_STEP_SUMMARY}"
   echo "" >> "${GITHUB_STEP_SUMMARY}"
-
   echo "| file | shell | status | comment |" >> "${GITHUB_STEP_SUMMARY}"
   echo "| ---- | ----- | :----: | ------- |" >> "${GITHUB_STEP_SUMMARY}"
   echo "::group::${file}"
@@ -62,7 +65,7 @@ for file in "${files[@]}"; do
   if ! is_shell_available "${shell}"; then
     echo "Unsupported shell: ${shell}"
     echo "| \`${file}\` | \`${shell}\` | :no_entry: | Unsupported shell |" >> "${GITHUB_STEP_SUMMARY}"
-    let warnings++
+    ((warnings++))
   fi
 
   # check syntax
@@ -72,6 +75,7 @@ done
 
 # print summary if files were checked
 if [ "${#files[@]}" -gt "0" ]; then
+  # shellcheck disable=SC2129
   echo "" >> "${GITHUB_STEP_SUMMARY}"
   echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
   echo "" >> "${GITHUB_STEP_SUMMARY}"
