@@ -18,16 +18,19 @@ runs:
             bash|sh)
             ;;
             *)
-              echo ":no_entry: Unsupported shell: ${shell}"
+              echo "Unsupported shell: ${shell}"
+              echo ":no_entry: Unsupported shell: ${shell} for ${file}"  >> $GITHUB_STEP_SUMMARY
               exit 1
               ;;
           esac
           ${shell} -n "${file}"
           syntaxexitcode=${?}
           if [ ${syntaxexitcode} -eq 0 ]; then
-            echo ":white_check_mark: ${file} check OK with ${shell}"
+            echo "${file} check OK with ${shell}"
+            echo ":white_check_mark: ${file} check OK with ${shell}" >> $GITHUB_STEP_SUMMARY
           else
-          echo ":no_entry: ${file} check FAIL with ${shell}"
+            echo "${file} check FAIL with ${shell}"
+            echo ":no_entry: ${file} check FAIL with ${shell}" >> $GITHUB_STEP_SUMMARY
             exit ${syntaxexitcode}
           fi
           echo "::endgroup::"
