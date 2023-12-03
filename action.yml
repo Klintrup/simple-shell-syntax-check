@@ -16,6 +16,7 @@ runs:
           # use case to verify that shell variable is a supported shell
           case ${shell} in
             bash|sh)
+            ;;
             *)
               echo ":no_entry: Unsupported shell: ${shell}"
               exit 1
