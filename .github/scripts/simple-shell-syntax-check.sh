@@ -44,7 +44,7 @@ is_shell_available() {
 declare -a files
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
-      files+=("${line}")
+    files+=("${line}")
   done < <(find . -type f -name "*.sh" -exec realpath --relative-to=. {} \;)
 else
   files=("$@")
