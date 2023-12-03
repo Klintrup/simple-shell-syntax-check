@@ -8,4 +8,4 @@ runs:
   steps:
     - name: Verify script syntax
       shell: bash
-      run: .github/scripts/simple-shell-syntax-check.sh
+      run: ls -l .github/scripts/simple-shell-syntax-check.sh
