@@ -20,7 +20,7 @@ check_shell_syntax() {
   fi
 }
 
-function is_shell_available() {
+is_shell_available() {
   local shell_to_check="${1}"
   local available_shells=("bash" "sh" "ksh" "zsh" "dash" "fish")
 
@@ -40,8 +40,7 @@ else
 fi
 
 errors=0
-available_shells=$(check_shells)
-echo "Available shells: ${available_shells}"
+warnings=0
 
 for file in "${files[@]}"; do
   echo "" >> "${GITHUB_STEP_SUMMARY}"
