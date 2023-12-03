@@ -38,4 +38,4 @@ jobs:
               - '**.csh.in'
               - '**.tcsh.in'
               - '**.fish.in'
-      - uses: Klintrup/simple-shell-syntax-check@v1
+      - uses: Klintrup/simple-shell-syntax-check@move-payload-to-script
