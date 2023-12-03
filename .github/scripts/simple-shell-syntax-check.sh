@@ -20,17 +20,25 @@ check_shell_syntax() {
   fi
 }
 
-is_shell_available() {
+is_shell_allowed() {
   local shell_to_check="${1}"
-  local available_shells=("bash" "sh" "ksh" "zsh" "dash" "fish")
+  local allowed_shells=("bash" "sh" "ksh" "zsh" "dash" "fish")
 
-  for shell in "${available_shells[@]}"; do
+  for shell in "${allowed_shells[@]}"; do
     if [ "${shell}" == "${shell_to_check}" ]; then
       return 0
     fi
   done
-
   return 1
+}
+
+is_shell_available() {
+  local shell_to_check="${1}"
+  if command -v "${shell_to_check}" > /dev/null 2>&1; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 declare -a files
@@ -62,9 +70,19 @@ for file in "${files[@]}"; do
   echo "Identified shell: ${shell}"
 
   # verify shell is available
-  if ! is_shell_available "${shell}"; then
+  if is_shell_allowed "${shell}"; then
+    if is_shell_available "${shell}"; then
+      # check syntax
+      check_shell_syntax "${file}" "${shell}"
+      echo "::endgroup::"
+    else
+      echo "Unavailable shell: ${shell}"
+      echo "| \`${file}\` | \`${shell}\` | :no_entry: | shell is not installed |" >> "${GITHUB_STEP_SUMMARY}"
+      ((warnings++))
+    fi
+  else
     echo "Unsupported shell: ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :no_entry: | Unsupported shell |" >> "${GITHUB_STEP_SUMMARY}"
+    echo "| \`${file}\` | \`${shell}\` | :no_entry: | shell is not supported |" >> "${GITHUB_STEP_SUMMARY}"
     ((warnings++))
   fi
 
