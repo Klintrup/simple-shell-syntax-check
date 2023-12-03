@@ -74,7 +74,6 @@ for file in "${files[@]}"; do
     if is_shell_available "${shell}"; then
       # check syntax
       check_shell_syntax "${file}" "${shell}"
-      echo "::endgroup::"
     else
       echo "Unavailable shell: ${shell}"
       echo "| \`${file}\` | \`${shell}\` | :no_entry: | shell is not installed |" >> "${GITHUB_STEP_SUMMARY}"
@@ -86,8 +85,6 @@ for file in "${files[@]}"; do
     ((warnings++))
   fi
 
-  # check syntax
-  check_shell_syntax "${file}" "${shell}"
   echo "::endgroup::"
 done
 
