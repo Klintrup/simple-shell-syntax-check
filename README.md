@@ -32,6 +32,7 @@ You can install the shell before using this action
 ```
 
 Or you can install all "missing" shells in a single command
+
 ```yaml
 - name: Install fish, ksh and zsh
   run: sudo apt-get install -y fish ksh zsh
