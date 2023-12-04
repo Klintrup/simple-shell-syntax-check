@@ -6,12 +6,9 @@ description: "Uses shell '-n' to syntax check shellscripts"
 runs:
   using: "composite"
   steps:
-    - name: Verify script syntax
+    - name:  make script executable
       shell: bash
-      run: |
-        echo "::group::make script executable"
-        chmod +x .github/scripts/simple-shell-syntax-check.sh
-        echo "::endgroup::"
-        echo "::group::run simple-shell-syntax-check.sh"
-        .github/scripts/simple-shell-syntax-check.sh
-        echo "::endgroup::"
+      run:   chmod +x .github/scripts/simple-shell-syntax-check.sh
+    - name:  run simple-shell-syntax-check.sh
+      shell: bash
+      run:   .github/scripts/simple-shell-syntax-check.sh
