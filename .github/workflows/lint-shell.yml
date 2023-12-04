@@ -14,35 +14,22 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-      - name: Install fish
-        run: sudo apt-get -y install fish
-      - name: Install ksh
-        run: sudo apt-get -y install ksh
-      - name: Install zsh
-        run: sudo apt-get -y install zsh
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v40
         with:
           files: |
             - '**.sh'
-            - '**.bash'
-            - '**.zsh'
-            - '**.ksh'
-            - '**.dash'
-            - '**.ash'
-            - '**.csh'
-            - '**.tcsh'
-            - '**.fish'
-            - '**.sh.in'
-            - '**.bash.in'
-            - '**.zsh.in'
-            - '**.ksh.in'
-            - '**.dash.in'
-            - '**.ash.in'
-            - '**.csh.in'
-            - '**.tcsh.in'
-            - '**.fish.in'
+      - name: Install fish
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: sudo apt-get -y install fish
+      - name: Install ksh
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: sudo apt-get -y install ksh
+      - name: Install zsh
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: sudo apt-get -y install zsh
       - uses: Klintrup/simple-shell-syntax-check@move-payload-to-script
+        if: steps.changed-files.outputs.any_changed == 'true'
         with:
           files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
