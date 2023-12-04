@@ -12,9 +12,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name:  make script executable
-      shell: bash
-      run:   chmod +x .github/scripts/simple-shell-syntax-check.sh
+    # - name:  make script executable
+    #   shell: bash
+    #   run:   chmod +x .github/scripts/simple-shell-syntax-check.sh
     - name:  run simple-shell-syntax-check.sh
       shell: bash
       run:   .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
