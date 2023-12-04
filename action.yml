@@ -9,5 +9,9 @@ runs:
     - name: Verify script syntax
       shell: bash
       run: |
+        echo "::group::make script executable"
         chmod +x .github/scripts/simple-shell-syntax-check.sh
+        echo "::endgroup::"
+        echo "::group::run simple-shell-syntax-check.sh"
         .github/scripts/simple-shell-syntax-check.sh
+        echo "::endgroup::"
