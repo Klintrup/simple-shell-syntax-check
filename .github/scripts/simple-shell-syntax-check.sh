@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-set -o errexit
 set -o nounset
 set -o pipefail
 
@@ -24,8 +23,8 @@ is_shell_allowed() {
   local shell_to_check="${1}"
   local allowed_shells=("bash" "sh" "ksh" "zsh" "dash" "fish")
 
-  for shell in "${allowed_shells[@]}"; do
-    if [ "${shell}" == "${shell_to_check}" ]; then
+  for local_shell in "${allowed_shells[@]}"; do
+    if [ "${local_shell}" == "${shell_to_check}" ]; then
       return 0
     fi
   done
@@ -50,25 +49,26 @@ else
   files=("$@")
 fi
 
-errors=0
-warnings=0
+declare -i errors=0
+declare -i warnings=0
 
-for file in "${files[@]}"; do
-  # shellcheck disable=SC2129
+# check if files array contains elements and print summary header
+if [ "${#files[@]}" -gt "0" ]; then
   echo "" >> "${GITHUB_STEP_SUMMARY}"
   echo "# Checked files" >> "${GITHUB_STEP_SUMMARY}"
   echo "" >> "${GITHUB_STEP_SUMMARY}"
   echo "| file | shell | status | comment |" >> "${GITHUB_STEP_SUMMARY}"
   echo "| ---- | ----- | :----: | ------- |" >> "${GITHUB_STEP_SUMMARY}"
+fi
+
+for file in "${files[@]}"; do
   echo "::group::${file}"
   echo "Checking ${file}"
   # identify shell from shebang
   shell=$(head -n 1 "${file}" | awk 'BEGIN{FS="/"} /^#!\/usr\/bin\/env/{split($NF,a," "); print a[2]; exit} /^#!\//{print $NF; exit}')
   # if no shebang, assume bash
   if [ -z "${shell}" ]; then shell="bash"; fi
-
   echo "Identified shell: ${shell}"
-
   # verify shell is available
   if is_shell_allowed "${shell}"; then
     if is_shell_available "${shell}"; then
@@ -84,7 +84,6 @@ for file in "${files[@]}"; do
     echo "| \`${file}\` | \`${shell}\` | :warning: | shell is not supported |" >> "${GITHUB_STEP_SUMMARY}"
     ((warnings++))
   fi
-
   echo "::endgroup::"
 done
 
@@ -95,7 +94,7 @@ if [ "${#files[@]}" -gt "0" ]; then
   echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
   echo "" >> "${GITHUB_STEP_SUMMARY}"
   echo "::group::Summary"
-  if [ "${errors}" -eq "0" ] || [ "${warnings}" -eq "0" ]; then
+  if [ "${errors}" -eq "0" ] && [ "${warnings}" -eq "0" ]; then
     echo "No errors or warnings"
     echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
   else
