@@ -9,16 +9,16 @@
 
 Very simple syntax checker.
 
-Locates all shellscripts (*.sh) in folder, identifies the shell and runs $shell -n to validate the script syntax is ok.
+Locates all shellscripts (\*.sh) in folder, identifies the shell and runs $shell -n to validate the script syntax is ok.
 
 ## supported shells
 
-- sh  
-- bash  
-- dash  
-- fish  
-- ksh  
-- zsh  
+- sh
+- bash
+- dash
+- fish
+- ksh
+- zsh
 
 The shell must exist on the runner for the test to work.
 
@@ -28,7 +28,7 @@ You can install the shell before using this action
 
 ```yaml
 - name: Install fish
-  run:  sudo apt-get install -y fish
+  run: sudo apt-get install -y fish
 ```
 
 ## instructions
@@ -44,7 +44,7 @@ You can install the shell before using this action
 
 ```yaml
 - uses: actions/checkout@v4
-- run:  sudo apt-get install -y fish
+- run: sudo apt-get install -y fish
 - uses: Klintrup/simple-shell-syntax-check@v2
 ```
 
@@ -64,5 +64,5 @@ You can install the shell before using this action
 - uses: Klintrup/simple-shell-syntax-check@v2
   if: steps.changed-files.outputs.any_changed == 'true'
   with:
-    files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}            
+    files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
 ```
