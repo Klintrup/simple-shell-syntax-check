@@ -46,9 +46,7 @@ for file in "${files[@]}"; do
   echo "::group::${file}"
   echo "Checking ${file}"
   # identify shell from shebang
-  shell=$(head -n 1 "${file}" | awk 'BEGIN{FS="/"} /^#!\/usr\/bin\/env/{split($NF,a," "); print a[2]; exit} /^#!\//{print $NF; exit}')
-  # if no shebang, assume bash
-  if [ -z "${shell}" ]; then shell="bash"; fi
+  shell="$(find_shell_from_shebang "${file}")"
   echo "Identified shell: ${shell}"
   # verify shell is available
   if is_shell_allowed "${shell}"; then
