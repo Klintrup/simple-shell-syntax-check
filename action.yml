@@ -10,11 +10,15 @@ inputs:
     default: ""
 
 runs:
-  using: "composite"
-  steps:
+  # using: "composite"
+  # steps:
     # - name:  make script executable
     #   shell: bash
     #   run:   chmod +x .github/scripts/simple-shell-syntax-check.sh
-    - name:  run simple-shell-syntax-check.sh
-      shell: bash
-      run:   .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
+    # - name:  run simple-shell-syntax-check.sh
+    #   shell: bash
+    #   run:   .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.files }}
