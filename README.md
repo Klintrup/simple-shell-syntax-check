@@ -13,12 +13,32 @@ Locates all shellscripts (\*.sh) in folder, identifies the shell and runs $shell
 
 ## supported shells
 
-- sh
-- bash
-- dash
-- fish
-- ksh
-- zsh
+  - sh
+  - bash
+  - dash
+  - fish
+  - ksh
+  - zsh
+  - sh
+  - bash
+  - dash
+  - fish
+  - ksh
+  - zsh
+  - sh
+  - bash
+  - dash
+  - fish
+  - ksh
+  - zsh
+  - fish
+  - ksh
+  - sh
+  - bash
+  - dash
+  - fish
+  - ksh
+  - zsh
 
 The shell must exist on the runner for the test to work.
 
