@@ -19,26 +19,7 @@ check_shell_syntax() {
   fi
 }
 
-is_shell_allowed() {
-  local shell_to_check="${1}"
-  local allowed_shells=("bash" "sh" "ksh" "zsh" "dash" "fish")
-
-  for local_shell in "${allowed_shells[@]}"; do
-    if [ "${local_shell}" == "${shell_to_check}" ]; then
-      return 0
-    fi
-  done
-  return 1
-}
-
-is_shell_available() {
-  local shell_to_check="${1}"
-  if command -v "${shell_to_check}" > /dev/null 2>&1; then
-    return 0
-  else
-    return 1
-  fi
-}
+. .github/scripts/functions.sh
 
 declare -a files
 if [ "${#}" -eq "0" ]; then
