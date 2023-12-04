@@ -19,7 +19,7 @@ jobs:
         uses: tj-actions/changed-files@v40
         with:
           files: |
-            - '**.sh'
+            **.sh
       - name: Install fish
         if: steps.changed-files.outputs.any_changed == 'true'
         run: sudo apt-get -y install fish
@@ -32,6 +32,4 @@ jobs:
       - uses: Klintrup/simple-shell-syntax-check@move-payload-to-script
         if: steps.changed-files.outputs.any_changed == 'true'
         with:
-          files: |
-            - examples/bash-example.sh
-            - examples/ksh-example.sh
+          files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
