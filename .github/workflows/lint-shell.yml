@@ -14,6 +14,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
+      - name: Install fish
+        run: sudo apt-get -y install fish
+      - name: Install ksh
+        run: sudo apt-get -y install ksh
+      - name: Install zsh
+        run: sudo apt-get -y install zsh
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v40
