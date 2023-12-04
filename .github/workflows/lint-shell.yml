@@ -20,18 +20,7 @@ jobs:
         with:
           files: |
             **.sh
-      - name: Install fish
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: sudo apt-get -y install fish
-      - name: Install ksh
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: sudo apt-get -y install ksh
-      - name: Install zsh
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: sudo apt-get -y install zsh
       - uses: Klintrup/simple-shell-syntax-check@move-payload-to-script
         if: steps.changed-files.outputs.any_changed == 'true'
         with:
           files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
-          
-          
