@@ -32,8 +32,6 @@ jobs:
       - uses: Klintrup/simple-shell-syntax-check@move-payload-to-script
         if: steps.changed-files.outputs.any_changed == 'true'
         with:
-          files: |
-            - examples/bash-example.sh
-            - examples/fish-example.fish
+          files: examples/bash-example.sh examples/fish-example.fish
           
           
