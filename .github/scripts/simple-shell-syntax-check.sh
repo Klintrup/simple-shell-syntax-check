@@ -76,12 +76,12 @@ for file in "${files[@]}"; do
       check_shell_syntax "${file}" "${shell}"
     else
       echo "Unavailable shell: ${shell}"
-      echo "| \`${file}\` | \`${shell}\` | :no_entry: | shell is not installed |" >> "${GITHUB_STEP_SUMMARY}"
+      echo "| \`${file}\` | \`${shell}\` | :warning: | shell is not installed |" >> "${GITHUB_STEP_SUMMARY}"
       ((warnings++))
     fi
   else
     echo "Unsupported shell: ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :no_entry: | shell is not supported |" >> "${GITHUB_STEP_SUMMARY}"
+    echo "| \`${file}\` | \`${shell}\` | :warning: | shell is not supported |" >> "${GITHUB_STEP_SUMMARY}"
     ((warnings++))
   fi
 
@@ -100,7 +100,7 @@ if [ "${#files[@]}" -gt "0" ]; then
     echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
   else
     echo "Errors: ${errors}, Warnings: ${warnings}"
-    echo ":no_entry: Errors: ${errors}, Warnings: ${warnings}" >> "${GITHUB_STEP_SUMMARY}"
+    echo ":no_entry: Errors: ${errors}, :warning: Warnings: ${warnings}" >> "${GITHUB_STEP_SUMMARY}"
     exit 1
   fi
   echo "::endgroup::"
