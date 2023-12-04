@@ -2,8 +2,9 @@ on:
   pull_request:
 
 name: lint-markdown
+
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   prettier:
