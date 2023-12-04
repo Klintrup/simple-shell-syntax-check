@@ -48,7 +48,7 @@ You can install the shell before using this action
 - uses: Klintrup/simple-shell-syntax-check@v2
 ```
 
-### Only validate files if changed
+### Only validate files if changed (for pull request)
 
 ```yaml
 - uses: actions/checkout@v4
@@ -61,7 +61,7 @@ You can install the shell before using this action
   with:
     files: |
       **.sh
-- uses: Klintrup/simple-shell-syntax-check@move-payload-to-script
+- uses: Klintrup/simple-shell-syntax-check@v2
   if: steps.changed-files.outputs.any_changed == 'true'
   with:
     files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}            
