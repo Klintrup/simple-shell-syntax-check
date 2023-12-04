@@ -1,6 +1,6 @@
 # simple shell syntax checker
 
-[![CodeFactor](https://www.codefactor.io/repository/github/klintrup/simple-shell-syntax-check/badge)](https://www.codefactor.io/repository/github/klintrup/simple-shell-syntax-check)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/c12b74a6c6504e88b38ea605ff2d5352)](https://app.codacy.com/gh/Klintrup/simple-shell-syntax-check/dashboard)
 [![License Apache 2.0](https://img.shields.io/github/license/Klintrup/simple-shell-syntax-check)](https://github.com/Klintrup/simple-shell-syntax-check/blob/main/LICENSE)
 [![Latest Release](https://img.shields.io/github/v/release/Klintrup/simple-shell-syntax-check)](https://github.com/Klintrup/simple-shell-syntax-check/releases)
 [![Contributors](https://img.shields.io/github/contributors-anon/Klintrup/simple-shell-syntax-check)](https://github.com/Klintrup/simple-shell-syntax-check/graphs/contributors)

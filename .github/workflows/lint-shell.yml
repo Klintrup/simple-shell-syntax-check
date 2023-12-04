@@ -1,9 +1,12 @@
 on:
   pull_request:
+  push:
+    branches: [ main ]
 
 name: lint-shell
+
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   sh:
