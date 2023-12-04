@@ -19,28 +19,8 @@ Locates all shellscripts (\*.sh) in folder, identifies the shell and runs $shell
 - fish
 - ksh
 - zsh
-- sh
-- bash
-- dash
-- fish
-- ksh
-- zsh
-- sh
-- bash
-- dash
-- fish
-- ksh
-- zsh
-- fish
-- ksh
-- sh
-- bash
-- dash
-- fish
-- ksh
-- zsh
 
-The shell must exist on the runner for the test to work.
+The shell must exist on the runner to be able to test.
 
 ### Installing shell on public runners
 
@@ -49,6 +29,12 @@ You can install the shell before using this action
 ```yaml
 - name: Install fish
   run: sudo apt-get install -y fish
+```
+
+Or you can install all "missing" shells in a single command
+```yaml
+- name: Install fish, ksh and zsh
+  run: sudo apt-get install -y fish ksh zsh
 ```
 
 ## instructions
@@ -81,6 +67,9 @@ You can install the shell before using this action
   with:
     files: |
       **.sh
+- name: Install shells
+  if: steps.changed-files.outputs.any_changed == 'true'
+  run: sudo apt-get install -y fish ksh zsh
 - uses: Klintrup/simple-shell-syntax-check@v2
   if: steps.changed-files.outputs.any_changed == 'true'
   with:
