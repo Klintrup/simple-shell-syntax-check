@@ -19,6 +19,6 @@ runs:
     #   shell: bash
     #   run:   .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
   using: 'docker'
-  image: ghcr.io/klintrup/simple-shell-syntax-check:pr-1
+  image: 'docker://ghcr.io/klintrup/simple-shell-syntax-check:pr-1'
   args:
     - ${{ inputs.files }}
