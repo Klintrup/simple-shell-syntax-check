@@ -32,4 +32,6 @@ jobs:
       - uses: Klintrup/simple-shell-syntax-check@move-payload-to-script
         if: steps.changed-files.outputs.any_changed == 'true'
         with:
-          files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
+          files: |
+            - examples/bash-example.sh
+            - examples/ksh-example.sh
