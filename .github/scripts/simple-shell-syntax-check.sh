@@ -143,7 +143,7 @@ print_summary() {
   fi
 }
 
-trap 'print_summary -e "$fn_errors" -w "$fn_warnings"' EXIT
+trap 'print_summary -e "${errors}" -w "${warnings}"' EXIT
 
 declare -a files
 if [ "${#}" -eq "0" ]; then
