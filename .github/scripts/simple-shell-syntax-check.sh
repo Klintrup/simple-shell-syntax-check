@@ -120,7 +120,7 @@ v      e)
         ;;
       f)
         fn_num_files="${OPTARG}"
-        echo "num_files:"${OPTARG}""
+        echo "num_files: ${OPTARG}"
         ;;
       \?)
         echo "Invalid option: -${OPTARG}" 1>&2
