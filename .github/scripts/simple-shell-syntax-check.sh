@@ -128,6 +128,8 @@ print_summary() {
     esac
   done
   shift $((OPTIND -1))
+  
+  echo "${fn_num_files}, ${fn_warnings}, ${fn_errors}"
 
   # print summary if files were checked
   if [ "${fn_num_files}" -gt "0" ]; then
