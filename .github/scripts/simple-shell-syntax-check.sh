@@ -61,8 +61,8 @@ write_to_summary() {
   local status=""
   local comment=""
 
-  while getopts ":f:s:t:c:" opt; do
-    case ${opt} in
+  while getopts ":f:s:t:c:" opt_summary_write; do
+    case ${opt_summary_write} in
       f)
         file="${OPTARG}"
         ;;
@@ -108,16 +108,19 @@ print_summary() {
   local fn_num_files=0
 
   echo "Arguments: $@"
-  while getopts "e:w:f:" opt; do
-    case ${opt} in
-      e)
+  while getopts "e:w:f:" opt_summary; do
+    case ${opt_summary} in
+v      e)
         fn_errors="${OPTARG}"
+        echo "errors: ${fn_errors}"
         ;;
       w)
         fn_warnings="${OPTARG}"
+        echo "warnings: ${fn_warnings}"
         ;;
       f)
         fn_num_files="${OPTARG}"
+        echo "num_files:"${OPTARG}""
         ;;
       \?)
         echo "Invalid option: -${OPTARG}" 1>&2
