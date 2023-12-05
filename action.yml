@@ -1,7 +1,10 @@
 
-name: "simple-shell-syntax-check"
+name: "Simple Shell Syntax Check"
 author: "Søren Klintrup <soren@klintrup.dk>"
 description: "Uses shell '-n' to syntax check shellscripts"
+branding:
+  icon: "terminal"
+  color: "gray-dark"
 
 inputs:
   files:
