@@ -100,12 +100,14 @@ print_header() {
 }
 
 print_summary() {
+  echo "Arguments: $@"
   if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
 
   local fn_errors=""
   local fn_warnings=""
   local fn_num_files=0
 
+  echo "Arguments: $@"
   while getopts "e:w:f:" opt; do
     case ${opt} in
       e)
