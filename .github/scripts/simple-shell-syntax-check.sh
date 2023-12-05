@@ -106,7 +106,7 @@ print_summary() {
   local fn_warnings=""
   local fn_num_files=0
 
-  while getopts ":e:w:f:" opt; do
+  while getopts "e:w:f:" opt; do
     case ${opt} in
       e)
         fn_errors="${OPTARG}"
