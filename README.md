@@ -1,10 +1,3 @@
----
-title: "Simple shell syntax checker"
-author: Søren Klintrup
-params:
-  headings: ["# Title", "## Head", "### Item"]
----
-
 # Simple shell syntax checker
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/c12b74a6c6504e88b38ea605ff2d5352)](https://app.codacy.com/gh/Klintrup/simple-shell-syntax-check/dashboard)
