@@ -110,7 +110,7 @@ print_summary() {
   echo "Arguments: $@"
   while getopts "e:w:f:" opt_summary; do
     case ${opt_summary} in
-v      e)
+      e)
         fn_errors="${OPTARG}"
         echo "errors: ${fn_errors}"
         ;;
