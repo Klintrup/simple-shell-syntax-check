@@ -1,0 +1,32 @@
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+name: lint-shell
+
+permissions:
+  contents: read
+
+jobs:
+  sh:
+    name: simple-shell-syntax-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            **.sh
+      - name: Install fish, ksh and zsh
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: sudo apt-get install -y fish ksh zsh
+      - uses: Klintrup/simple-shell-syntax-check@v2
+        if: steps.changed-files.outputs.any_changed == 'true'
+        with:
+          files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
