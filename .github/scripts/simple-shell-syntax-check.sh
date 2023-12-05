@@ -147,9 +147,12 @@ print_summary() {
   fi
 }
 
+declare -a files
+declare -i errors=0
+declare -i warnings=0
+
 trap 'print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"' EXIT
 
-declare -a files
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
     files+=("${line}")
@@ -157,9 +160,6 @@ if [ "${#}" -eq "0" ]; then
 else
   files=("$@")
 fi
-
-declare -i errors=0
-declare -i warnings=0
 
 # check if files array contains elements and print summary header
 if [ "${#files[@]}" -gt "0" ]; then
