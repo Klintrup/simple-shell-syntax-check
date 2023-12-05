@@ -11,10 +11,10 @@ check_shell_syntax() {
   syntaxexitcode="${?}"
   if [ "${syntaxexitcode}" -eq 0 ]; then
     echo "${file} check OK with ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :white_check_mark: | |" >> "${GITHUB_STEP_SUMMARY}"
+    write_to_summary -f "${file}" -s "${shell}" -t ":white_check_mark:" -c ""
   else
     echo "${file} check FAIL with ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :no_entry: | see run log |" >> "${GITHUB_STEP_SUMMARY}"
+    write_to_summary -f "${file}" -s "${shell}" -t ":no_entry:" -c "syntax error"
     ((errors++))
   fi
 }
@@ -53,6 +53,98 @@ find_shell_from_shebang() {
   echo "${fn_shell}"
 }
 
+write_to_summary() {
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+  
+  local file=""
+  local shell=""
+  local status=""
+  local comment=""
+
+  while getopts ":f:s:t:c:" opt; do
+    case ${opt} in
+      f)
+        file="${OPTARG}"
+        ;;
+      s)
+        shell="${OPTARG}"
+        ;;
+      t)
+        status="${OPTARG}"
+        ;;
+      c)
+        comment="${OPTARG}"
+        ;;
+      \?)
+        echo "Invalid option: -${OPTARG}" 1>&2
+        return 1
+        ;;
+      :)
+        echo "Option -${OPTARG} requires an argument." 1>&2
+        return 1
+        ;;
+    esac
+  done
+  shift $((OPTIND -1))
+
+  echo "| \`${file}\` | \`${shell}\` | ${status} | ${comment} |" >> "${GITHUB_STEP_SUMMARY}"
+}
+
+print_header() {
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+  echo "" >> "${GITHUB_STEP_SUMMARY}"
+  echo "# Checked files" >> "${GITHUB_STEP_SUMMARY}"
+  echo "" >> "${GITHUB_STEP_SUMMARY}"
+  echo "| file | shell | status | comment |" >> "${GITHUB_STEP_SUMMARY}"
+  echo "| ---- | ----- | :----: | ------- |" >> "${GITHUB_STEP_SUMMARY}"
+}
+
+print_summary() {
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+
+  local fn_errors=""
+  local fn_warnings=""
+
+  while getopts ":e:w:" opt; do
+    case ${opt} in
+      e)
+        fn_errors="${OPTARG}"
+        ;;
+      w)
+        fn_warnings="${OPTARG}"
+        ;;
+      \?)
+        echo "Invalid option: -${OPTARG}" 1>&2
+        return 1
+        ;;
+      :)
+        echo "Option -${OPTARG} requires an argument." 1>&2
+        return 1
+        ;;
+    esac
+  done
+  shift $((OPTIND -1))
+
+  # print summary if files were checked
+  if [ "${#fn_files[@]}" -gt "0" ]; then
+    # shellcheck disable=SC2129
+    echo "" >> "${GITHUB_STEP_SUMMARY}"
+    echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
+    echo "" >> "${GITHUB_STEP_SUMMARY}"
+    echo "::group::Summary"
+    if [ "${fn_errors}" -eq "0" ] && [ "${fn_warnings}" -eq "0" ]; then
+      echo "No errors or warnings"
+      echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
+    else
+      echo "Errors: ${fn_errors}, Warnings: ${fn_warnings}"
+      echo ":no_entry: Errors: ${fn_errors}, :warning: Warnings: ${fn_warnings}" >> "${GITHUB_STEP_SUMMARY}"
+    fi
+    echo "::endgroup::"
+  fi
+}
+
+trap 'print_summary -e "$fn_errors" -w "$fn_warnings"' EXIT
+
 declare -a files
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
@@ -67,11 +159,7 @@ declare -i warnings=0
 
 # check if files array contains elements and print summary header
 if [ "${#files[@]}" -gt "0" ]; then
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "# Checked files" >> "${GITHUB_STEP_SUMMARY}"
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "| file | shell | status | comment |" >> "${GITHUB_STEP_SUMMARY}"
-  echo "| ---- | ----- | :----: | ------- |" >> "${GITHUB_STEP_SUMMARY}"
+  print_header
 fi
 
 for file in "${files[@]}"; do
@@ -87,31 +175,15 @@ for file in "${files[@]}"; do
       check_shell_syntax "${file}" "${shell}"
     else
       echo "Unavailable shell: ${shell}"
-      echo "| \`${file}\` | \`${shell}\` | :warning: | shell is not installed |" >> "${GITHUB_STEP_SUMMARY}"
+      write_to_summary -f "${file}" -s "${shell}" -t ":warning:" -c "shell is not installed"
       ((warnings++))
     fi
   else
     echo "Unsupported shell: ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :warning: | shell is not supported |" >> "${GITHUB_STEP_SUMMARY}"
+    write_to_summary -f "${file}" -s "${shell}" -t ":warning:" -c "shell is not supported"
     ((warnings++))
   fi
   echo "::endgroup::"
 done
 
-# print summary if files were checked
-if [ "${#files[@]}" -gt "0" ]; then
-  # shellcheck disable=SC2129
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "::group::Summary"
-  if [ "${errors}" -eq "0" ] && [ "${warnings}" -eq "0" ]; then
-    echo "No errors or warnings"
-    echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
-  else
-    echo "Errors: ${errors}, Warnings: ${warnings}"
-    echo ":no_entry: Errors: ${errors}, :warning: Warnings: ${warnings}" >> "${GITHUB_STEP_SUMMARY}"
-    exit 1
-  fi
-  echo "::endgroup::"
-fi
+# summary printed as trap statement
