@@ -2,11 +2,7 @@
 title: "Simple shell syntax checker"
 author: Søren Klintrup
 params:
-  headings: [
-              "# Title",
-              "## Head",
-              "### Item"
-            ]
+  headings: ["# Title", "## Head", "### Item"]
 ---
 
 # Simple shell syntax checker
