@@ -191,3 +191,6 @@ for file in "${files[@]}"; do
 done
 
 # summary printed as trap statement
+
+trap 'print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"' EXIT
+echo "print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"
