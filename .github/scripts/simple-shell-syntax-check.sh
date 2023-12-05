@@ -195,4 +195,5 @@ done
 # summary printed as trap statement
 
 trap 'print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"' EXIT
+print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"
 echo "print_summary -f ${#files[@]} -e ${errors} -w ${warnings}"
