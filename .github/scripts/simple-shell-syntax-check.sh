@@ -125,25 +125,22 @@ print_summary() {
   done
   shift $((OPTIND -1))
 
-  # print summary if files were checked
-  if [ "${#fn_files[@]}" -gt "0" ]; then
-    # shellcheck disable=SC2129
-    echo "" >> "${GITHUB_STEP_SUMMARY}"
-    echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
-    echo "" >> "${GITHUB_STEP_SUMMARY}"
-    echo "::group::Summary"
-    if [ "${fn_errors}" -eq "0" ] && [ "${fn_warnings}" -eq "0" ]; then
-      echo "No errors or warnings"
-      echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
-    else
-      echo "Errors: ${fn_errors}, Warnings: ${fn_warnings}"
-      echo ":no_entry: Errors: ${fn_errors}, :warning: Warnings: ${fn_warnings}" >> "${GITHUB_STEP_SUMMARY}"
-    fi
-    echo "::endgroup::"
+  # shellcheck disable=SC2129
+  echo "" >> "${GITHUB_STEP_SUMMARY}"
+  echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
+  echo "" >> "${GITHUB_STEP_SUMMARY}"
+  echo "::group::Summary"
+  if [ "${fn_errors}" -eq "0" ] && [ "${fn_warnings}" -eq "0" ]; then
+    echo "No errors or warnings"
+    echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
+  else
+    echo "Errors: ${fn_errors}, Warnings: ${fn_warnings}"
+    echo ":no_entry: Errors: ${fn_errors}, :warning: Warnings: ${fn_warnings}" >> "${GITHUB_STEP_SUMMARY}"
   fi
+  echo "::endgroup::"
 }
 
-trap 'print_summary -e "${errors}" -w "${warnings}"' EXIT
+trap 'if [ "${#files[@]}" -gt "0" ]; then print_summary -e "${errors}" -w "${warnings}";fi' EXIT
 
 declare -a files
 if [ "${#}" -eq "0" ]; then
