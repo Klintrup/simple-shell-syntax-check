@@ -104,7 +104,7 @@ print_summary() {
 
   local fn_errors=""
   local fn_warnings=""
-  local num_files=0
+  local fn_num_files=0
 
   while getopts ":e:w:f:" opt; do
     case ${opt} in
@@ -115,7 +115,7 @@ print_summary() {
         fn_warnings="${OPTARG}"
         ;;
       f)
-        num_files="${OPTARG}"
+        fn_num_files="${OPTARG}"
         ;;
       \?)
         echo "Invalid option: -${OPTARG}" 1>&2
@@ -130,6 +130,7 @@ print_summary() {
   shift $((OPTIND -1))
 
   # print summary if files were checked
+  if [ "${fn_num_files}" -gt "0" ]; then
     # shellcheck disable=SC2129
     echo "" >> "${GITHUB_STEP_SUMMARY}"
     echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
@@ -143,12 +144,12 @@ print_summary() {
       echo ":no_entry: Errors: ${fn_errors}, :warning: Warnings: ${fn_warnings}" >> "${GITHUB_STEP_SUMMARY}"
     fi
     echo "::endgroup::"
+  fi
 }
 
 trap 'print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"' EXIT
 
 declare -a files
-
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
     files+=("${line}")
