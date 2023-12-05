@@ -18,9 +18,11 @@ params:
 [![Issues](https://img.shields.io/github/issues/Klintrup/simple-shell-syntax-check)](https://github.com/Klintrup/simple-shell-syntax-check/issues)
 [![build](https://img.shields.io/github/actions/workflow/status/Klintrup/simple-shell-syntax-check/lint-shell.yml)](https://github.com/Klintrup/simple-shell-syntax-check/actions/workflows/lint-shell.yml)
 
-Locates all shellscripts (\*.sh) in folder, identifies the shell and runs $shell -n to validate the script syntax is ok.
+Locates all shellscripts (\*.sh) in a folder, identifies the shell, and runs
+`$shell -n` to validate that the script syntax is ok.
 
-The purpose of this action is to identify syntax errors within a script, it does not guarantee that the script will run successfully.
+The purpose of this action is to identify syntax errors within a script, it
+does not guarantee that the script will run successfully.
 
 ## supported shells
 
