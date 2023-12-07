@@ -44,7 +44,7 @@ jobs:
     needs: list-files
     strategy:
       matrix:
-        filename: ${{ needs.list-files.outputs.sh-examples }}
+        filename: ${{fromJson(needs.list-files.outputs.sh-examples)}}
     steps:
       - uses: actions/checkout@v4
       - name: Install fish
