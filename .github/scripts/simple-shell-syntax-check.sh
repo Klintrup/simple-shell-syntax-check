@@ -103,37 +103,10 @@ print_summary() {
   echo "Arguments: $@"
   if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
 
-  local fn_errors=""
-  local fn_warnings=""
-  local fn_num_files=0
+  local fn_errors="${3}"
+  local fn_warnings="${2}"
+  local fn_num_files="${1}"
 
-  echo "Arguments: $@"
-  while getopts "e:w:f:" opt_summary; do
-    case ${opt_summary} in
-      e)
-        fn_errors="${OPTARG}"
-        echo "errors: ${fn_errors}"
-        ;;
-      w)
-        fn_warnings="${OPTARG}"
-        echo "warnings: ${fn_warnings}"
-        ;;
-      f)
-        fn_num_files="${OPTARG}"
-        echo "num_files: ${OPTARG}"
-        ;;
-      \?)
-        echo "Invalid option: -${OPTARG}" 1>&2
-        return 1
-        ;;
-      :)
-        echo "Option -${OPTARG} requires an argument." 1>&2
-        return 1
-        ;;
-    esac
-  done
-  shift $((OPTIND -1))
-  
   echo "${fn_num_files}, ${fn_warnings}, ${fn_errors}"
 
   # print summary if files were checked
@@ -158,7 +131,7 @@ declare -a files
 declare -i errors=0
 declare -i warnings=0
 
-trap 'print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"' EXIT
+trap 'print_summary "${#files[@]:-0}" "${errors}" "${warnings}"' EXIT
 
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
@@ -199,6 +172,6 @@ done
 
 # summary printed as trap statement
 
-trap 'print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"' EXIT
-print_summary -f "${#files[@]}" -e "${errors}" -w "${warnings}"
-echo "print_summary -f ${#files[@]} -e ${errors} -w ${warnings}"
+trap 'print_summary "${#files[@]:-0}" "${errors:-0}" "${warnings:-0}"' EXIT
+print_summary -f "${#files[@]:-+}" -e "${errors:-0}" -w "${warnings:-0}"
+echo "print_summary -f ${#files[@]:-0} -e ${errors:-0} -w ${warnings:-0}"
