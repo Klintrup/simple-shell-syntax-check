@@ -16,9 +16,9 @@ locate all .sh files in the current folder.
 
 ## Inputs
 
-| Input | required | Description |
-| -- | -- | -- |
-| files | no | Files to be checked |
+| Input | required | Description         |
+| ----- | -------- | ------------------- |
+| files | no       | Files to be checked |
 
 ## Output
 
