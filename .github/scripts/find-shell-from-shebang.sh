@@ -13,4 +13,4 @@ find_shell_from_shebang() {
   echo "${fn_shell}"
 }
 
-echo "shell=$(find_shell_from_shebang "${1}")" >> $GITHUB_OUTPUT
+echo "shell=$(find_shell_from_shebang "${1}")" >> "${GITHUB_OUTPUT}"
