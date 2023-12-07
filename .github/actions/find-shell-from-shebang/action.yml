@@ -1,0 +1,22 @@
+name: "local-find-shell-from-shebang"
+author: "Søren Klintrup <soren@klintrup.dk>"
+description: "finds shell from shebang"
+branding:
+  icon: "terminal"
+  color: "gray-dark"
+
+inputs:
+  file:
+    description: "File to check"
+    required: true
+outputs:
+  shell:
+    description: "Shell found"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name:  run find-shell-from-shebang.sh
+      shell: bash
+      run:   .github/scripts/find-shell-from-shebang.sh ${{ inputs.files }}
