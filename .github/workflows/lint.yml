@@ -34,12 +34,12 @@ jobs:
         id:   matrix-changed-sh
         run:  |
                 (
-                  echo -n "files={\"include\":[{"
+                  echo -n "files={\"include\":["
                   for filename in ${{ steps.changed-files-sh.outputs.all_changed_files }}}
                   do
-                    echo -n "\"filename\": \"${filename}\", "
+                    echo -n "{ \"filename\": \"${filename}\" }, "
                   done|sed s/,$//
-                  echo -n "}]}" 
+                  echo -n "]}" 
                 ) | tee -a ${GITHUB_OUTPUT}
       - name: Get changed files
         id: changed-files-md
@@ -51,12 +51,12 @@ jobs:
         id:   matrix-examples-sh
         run:  |
                 (
-                  echo -n "files={\"include\":[{"
+                  echo "files={\"include\":["
                   for filename in $(find examples/ -name '*.sh')
                   do
-                    echo -n "\"filename\": \"${filename}\", "
+                    echo "{ \"filename\": \"${filename}\" }, "
                   done|sed s/,$//
-                  echo -n "}]}" 
+                  echo "]}" 
                 ) | tee -a ${GITHUB_OUTPUT}
   sh-verify-examples:
     name: sh-verify-examples
