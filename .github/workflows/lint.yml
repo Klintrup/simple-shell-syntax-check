@@ -38,7 +38,7 @@ jobs:
                   for filename in ${{ steps.changed-files-sh.outputs.all_changed_files }}}
                   do
                     echo -n "{ \"filename\": \"${filename}\" }, "
-                  done|sed s/,$//
+                  done|sed -E -e s/",[[:blank:]]{1,}$"//
                   echo -n "]}" 
                 ) | tee -a ${GITHUB_OUTPUT}
       - name: Get changed files
