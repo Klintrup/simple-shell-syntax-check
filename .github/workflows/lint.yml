@@ -42,7 +42,7 @@ jobs:
                   echo -n "files={\"include\":[{"
                   for filename in $(find examples/ -name '*.sh')
                   do
-                    echo -n "\"filename\": \"${filename}\"", "
+                    echo -n "\"filename\": \"${filename}\","
                   done|sed s/,$//
                   echo -n "}]}" 
                 ) >> ${GITHUB_OUTPUT}
