@@ -37,7 +37,15 @@ jobs:
              **.md
       - name: find examples
         id:   find-examples
-        run:  echo "files={\"include\":[$(ls examples/*.sh | awk '{printf "{\"filename\":\"%s\"},", $0}' | sed 's/,$//')]}" >> $GITHUB_OUTPUT
+        run:  |
+                ( 
+                  echo -n "files={\"include\":[{"
+                  for file in $(find examples/ -name '*.sh')
+                  do
+                    echo -n "\"file\": ${file}, "
+                  done|sed s/,$//
+                  echo -n "}]}" 
+                ) >> ${GITHUB_OUTPUT}
   sh-verify-examples:
     name: sh-verify-examples
     runs-on: ubuntu-latest
