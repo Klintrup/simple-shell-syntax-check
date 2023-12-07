@@ -85,7 +85,7 @@ jobs:
       - uses: ./.github/actions/find-shell-from-shebang/
         id: find-shell
         with:
-          files: ${{ matrix.filename }}
+          file: ${{ matrix.filename }}
       - name: Install fish
         if:   startsWith(${{ steps.find-shell.outputs.shell }}, fish) == true
         run: sudo apt-get install -y fish
