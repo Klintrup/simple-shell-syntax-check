@@ -33,7 +33,8 @@ Outputs status of each file to the action summary
 - ksh
 - zsh
 
-The shell must exist on the runner to be able to test, if the shell doesn't exist that test will fail.
+The shell must exist on the runner to be able to test. If the shell doesn't
+exist, that test will fail.
 
 ### Installing shell on ubuntu-latest runner
 
