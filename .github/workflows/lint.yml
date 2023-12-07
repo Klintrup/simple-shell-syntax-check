@@ -17,7 +17,7 @@ jobs:
       sh-any-changed:   ${{ steps.changed-files-sh.outputs.any_changed }}
       md-changed-files: ${{ steps.changed-files-md.outputs.all_changed_files }}
       md-any-changed:   ${{ steps.changed-files-md.outputs.any_changed }}
-      sh-examples:      ${{ steps.find-examples.outputs.files }}
+      sh-examples:      ${{ steps.find-examples-sh.outputs.files }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,7 +36,7 @@ jobs:
           files: |
              **.md
       - name: find examples
-        id:   find-examples
+        id:   find-examples-sh
         run:  |
                 (
                   echo -n "files={\"include\":[{"
@@ -51,17 +51,21 @@ jobs:
     runs-on: ubuntu-latest
     needs: list-files
     strategy:
-      matrix: ${{fromJson(needs.list-files.outputs.sh-examples)}}
+      matrix: "${{fromJson(needs.list-files.outputs.sh-examples)}}"
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/find-shell-from-shebang/
+        id: find-shell
+        with:
+          files: "${{ matrix.filename }}"
       - name: Install fish
-        if: startsWith(${{ matrix.filename }}, fish) == true
+        if:   startsWith("${{ steps.find-shell.outputs.shell }}", "fish") == "true"
         run: sudo apt-get install -y fish
       - name: Install ksh
-        if: startsWith(${{ matrix.filename }}, ksh) == true
+        if:   startsWith("${{ steps.find-shell.outputs.shell }}", "ksh") == "true"
         run: sudo apt-get install -y ksh
       - name: Install zsh
-        if: startsWith(${{ matrix.filename }}, zsh) == true
+        if:   startsWith("${{ steps.find-shell.outputs.shell }}", "zsh") == "true"
         run: sudo apt-get install -y zsh
       - name: syntax-${{ matrix.filename }}
         id:   matrix-syntax
@@ -71,10 +75,11 @@ jobs:
   sh-check-changed:
     name: Check changed files
     needs: [ list-files, sh-verify-examples ]
+    if:    needs.list-files.outputs.sh-any-changed == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        filename: ${{ needs.list-files.outputs.sh-examples }}
+        filename: ${{ needs.list-files.outputs.sh-changed-files }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/find-shell-from-shebang/
