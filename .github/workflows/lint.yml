@@ -42,7 +42,7 @@ jobs:
                   echo -n "files={\"include\":[{"
                   for file in $(find examples/ -name '*.sh')
                   do
-                    echo -n "\"file\": ${file}, "
+                    echo -n "\"filename\": ${file}, "
                   done|sed s/,$//
                   echo -n "}]}" 
                 ) >> ${GITHUB_OUTPUT}
@@ -51,8 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: list-files
     strategy:
-      matrix:
-        filename: ${{fromJson(needs.list-files.outputs.sh-examples)}}
+      matrix: ${{fromJson(needs.list-files.outputs.sh-examples)}}
     steps:
       - uses: actions/checkout@v4
       - name: Install fish
