@@ -51,12 +51,12 @@ jobs:
         id:   matrix-examples-sh
         run:  |
                 (
-                  echo "files={\"include\":["
+                  echo -n "files={\"include\":["
                   for filename in $(find examples/ -name '*.sh')
                   do
-                    echo "{ \"filename\": \"${filename}\" }, "
+                    echo -n "{ \"filename\": \"${filename}\" }, "
                   done|sed s/,$//
-                  echo "]}" 
+                  echo -n "]}" 
                 ) | tee -a ${GITHUB_OUTPUT}
   sh-verify-examples:
     name: sh-verify-examples
