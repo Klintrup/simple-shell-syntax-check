@@ -131,7 +131,7 @@ declare -a files
 declare -i errors=0
 declare -i warnings=0
 
-trap 'print_summary "${#files[@]:-0}" "${errors}" "${warnings}"' EXIT
+trap 'print_summary "${#files[@]}" "${errors}" "${warnings}"' EXIT
 
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
@@ -172,6 +172,6 @@ done
 
 # summary printed as trap statement
 
-trap 'print_summary "${#files[@]:-0}" "${errors:-0}" "${warnings:-0}"' EXIT
-print_summary -f "${#files[@]:-+}" -e "${errors:-0}" -w "${warnings:-0}"
-echo "print_summary -f ${#files[@]:-0} -e ${errors:-0} -w ${warnings:-0}"
+trap 'print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"' EXIT
+print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"
+echo "print_summary ${#files[@]:-0} ${errors:-0} ${warnings:-0}"
