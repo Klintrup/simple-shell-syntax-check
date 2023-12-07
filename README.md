@@ -5,13 +5,24 @@
 [![Latest Release](https://img.shields.io/github/v/release/Klintrup/simple-shell-syntax-check)](https://github.com/Klintrup/simple-shell-syntax-check/releases)
 [![Contributors](https://img.shields.io/github/contributors-anon/Klintrup/simple-shell-syntax-check)](https://github.com/Klintrup/simple-shell-syntax-check/graphs/contributors)
 [![Issues](https://img.shields.io/github/issues/Klintrup/simple-shell-syntax-check)](https://github.com/Klintrup/simple-shell-syntax-check/issues)
-[![build](https://img.shields.io/github/actions/workflow/status/Klintrup/simple-shell-syntax-check/lint-shell.yml)](https://github.com/Klintrup/simple-shell-syntax-check/actions/workflows/lint-shell.yml)
+[![build](https://img.shields.io/github/actions/workflow/status/Klintrup/simple-shell-syntax-check/lint.yml)](https://github.com/Klintrup/simple-shell-syntax-check/actions/workflows/lint.yml)
 
-Locates all shellscripts (\*.sh) in a folder, identifies the shell, and runs
-`$shell -n` to validate that the script syntax is ok.
+## Description
 
-The purpose of this action is to identify syntax errors within a script, it
-does not guarantee that the script will run successfully.
+This GitHub Action, named "Simple Shell Syntax Check", is designed to perform
+syntax checks on shell scripts. The action takes an optional input 'files'. If
+provided, it will check the syntax of these specific files. If not provided,
+locate all .sh files in the current folder.
+
+## Inputs
+
+| Input | required | Description |
+| -- | -- | -- |
+| files | no | Files to be checked |
+
+## Output
+
+Outputs status of each file to the action summary
 
 ## supported shells
 
@@ -22,9 +33,9 @@ does not guarantee that the script will run successfully.
 - ksh
 - zsh
 
-The shell must exist on the runner to be able to test.
+The shell must exist on the runner to be able to test, if the shell doesn't exist that test will fail.
 
-### Installing shell on public runners
+### Installing shell on ubuntu-latest runner
 
 You can install the shell before using this action
 
