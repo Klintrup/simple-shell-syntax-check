@@ -11,12 +11,13 @@ inputs:
     required: true
 outputs:
   shell:
-    description: "Shell found"
-    required: true
+    description: "Shell from script"
+    value: ${{ steps.id-shell.outputs.shell }}
 
 runs:
   using: "composite"
   steps:
     - name:  run find-shell-from-shebang.sh
+      id:    id-shell
       shell: bash
       run:   .github/scripts/find-shell-from-shebang.sh ${{ inputs.files }}
