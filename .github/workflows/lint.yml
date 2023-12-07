@@ -38,7 +38,9 @@ jobs:
       - name: find examples
         id: find-examples
         run: |
-          echo "files=$(ls -1 examples/*.sh)" >> "${GITHUB_OUTPUT}"
+          echo 'files<<EOF' >> $GITHUB_OUTPUT
+          ls -1 examples/*.sh >> "${GITHUB_OUTPUT}"
+          echo 'EOF' >> $GITHUB_OUTPUT
   sh-verify-examples:
     name: sh-verify-examples
     runs-on: ubuntu-latest
