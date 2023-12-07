@@ -42,7 +42,7 @@ jobs:
         id: list-examples
         run: |
           cd examples
-          files=$(ls -1 *.sh) >> $GITHUB_OUTPUT
+          files=$(ls -1 *.sh) >> ${GITHUB_OUTPUT}
       - name: Check syntax
         uses: ./
         with:

@@ -3,6 +3,17 @@
 set -o nounset
 set -o pipefail
 
+write_to_summary() {
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+  
+  local file="${1}"
+  local shell="${2}"
+  local status="${3}"
+  local comment="${4}"
+
+  echo "| \`${file}\` | \`${shell}\` | ${status} | ${comment} |" >> "${GITHUB_STEP_SUMMARY}"
+}
+
 check_shell_syntax() {
   local file="${1}"
   local shell="${2}"
@@ -11,10 +22,10 @@ check_shell_syntax() {
   syntaxexitcode="${?}"
   if [ "${syntaxexitcode}" -eq 0 ]; then
     echo "${file} check OK with ${shell}"
-    write_to_summary -f "${file}" -s "${shell}" -t ":white_check_mark:" -c ""
+    write_to_summary "${file}" "${shell}" ":white_check_mark:" ""
   else
     echo "${file} check FAIL with ${shell}"
-    write_to_summary -f "${file}" -s "${shell}" -t ":no_entry:" -c "syntax error"
+    write_to_summary "${file}" "${shell}" ":no_entry:" "syntax error"
     ((errors++))
   fi
 }
@@ -51,43 +62,6 @@ find_shell_from_shebang() {
    fn_shell="bash"
   fi
   echo "${fn_shell}"
-}
-
-write_to_summary() {
-  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
-  
-  local file=""
-  local shell=""
-  local status=""
-  local comment=""
-
-  while getopts ":f:s:t:c:" opt_summary_write; do
-    case ${opt_summary_write} in
-      f)
-        file="${OPTARG}"
-        ;;
-      s)
-        shell="${OPTARG}"
-        ;;
-      t)
-        status="${OPTARG}"
-        ;;
-      c)
-        comment="${OPTARG}"
-        ;;
-      \?)
-        echo "Invalid option: -${OPTARG}" 1>&2
-        return 1
-        ;;
-      :)
-        echo "Option -${OPTARG} requires an argument." 1>&2
-        return 1
-        ;;
-    esac
-  done
-  shift $((OPTIND -1))
-
-  echo "| \`${file}\` | \`${shell}\` | ${status} | ${comment} |" >> "${GITHUB_STEP_SUMMARY}"
 }
 
 print_header() {
@@ -159,12 +133,12 @@ for file in "${files[@]}"; do
       check_shell_syntax "${file}" "${shell}"
     else
       echo "Unavailable shell: ${shell}"
-      write_to_summary -f "${file}" -s "${shell}" -t ":warning:" -c "shell is not installed"
+      write_to_summary "${file}" "${shell}" ":warning:" "shell is not installed"
       ((warnings++))
     fi
   else
     echo "Unsupported shell: ${shell}"
-    write_to_summary -f "${file}" -s "${shell}" -t ":warning:" -c "shell is not supported"
+    write_to_summary "${file}" "${shell}" ":warning:" "shell is not supported"
     ((warnings++))
   fi
   echo "::endgroup::"
