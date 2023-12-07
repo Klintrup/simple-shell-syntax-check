@@ -131,7 +131,7 @@ declare -a files
 declare -i errors=0
 declare -i warnings=0
 
-trap 'print_summary "${#files[@]}" "${errors}" "${warnings}"' EXIT
+trap 'print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"' EXIT
 
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
@@ -169,9 +169,3 @@ for file in "${files[@]}"; do
   fi
   echo "::endgroup::"
 done
-
-# summary printed as trap statement
-
-trap 'print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"' EXIT
-print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"
-echo "print_summary ${#files[@]:-0} ${errors:-0} ${warnings:-0}"
