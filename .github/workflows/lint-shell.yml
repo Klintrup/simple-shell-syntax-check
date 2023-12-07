@@ -26,7 +26,25 @@ jobs:
       - name: Install fish, ksh and zsh
         if: steps.changed-files.outputs.any_changed == 'true'
         run: sudo apt-get install -y fish ksh zsh
-      - uses: ./
+      - name: Check syntax
+        uses: ./
         if: steps.changed-files.outputs.any_changed == 'true'
         with:
           files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
+  examples:
+    name: test-all-examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install fish, ksh and zsh
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: sudo apt-get install -y fish ksh zsh
+      - name: list examples
+        id: list-examples
+        run: |
+          cd examples
+          files=$(ls -1 *.sh) >> $GITHUB_OUTPUT
+      - name: Check syntax
+        uses: ./
+        with:
+          files: ${{ steps.list-examples.outputs.files }}
