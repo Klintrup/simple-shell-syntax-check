@@ -93,6 +93,11 @@ jobs:
       matrix: ${{ fromJson(needs.list-files.outputs.sh-changed-matrix) }}
     steps:
       - uses: actions/checkout@v4
+      - name: debug
+        run: |
+          echo ${{ matrix.filename }}
+          env
+          find ${{ github.workspace }} -type f
       - uses: ./.github/actions/find-shell-from-shebang/
         id: find-shell
         with:
@@ -108,7 +113,6 @@ jobs:
         run: sudo apt-get install -y zsh
       - name: Check syntax
         uses: ./
-        if:   needs.list-files.outputs.sh-matrix == 'true'
         with:
           files: ${{ matrix.filename }}
   prettier:
