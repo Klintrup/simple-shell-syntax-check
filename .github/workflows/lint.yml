@@ -49,7 +49,7 @@ jobs:
       - name: find examples
         id:   matrix-examples-sh
         run:  |
-                echo "sh-examples= <EOF"    >> ${GITHUB_OUTPUT}
+                echo "sh-examples<<EOF"    >> ${GITHUB_OUTPUT}
                 find examples/ -name '*.sh' >> ${GITHUB_OUTPUT}
                 echo "EOF"                  >> ${GITHUB_OUTPUT}
   sh-verify-examples:
