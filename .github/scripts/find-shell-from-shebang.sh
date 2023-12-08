@@ -13,4 +13,8 @@ find_shell_from_shebang() {
   echo "${fn_shell}"
 }
 
+if [ "${#}" -eq "0" ]; then
+  echo "usage: ${0} <file>"
+  exit 1
+fi
 echo "shell=$(find_shell_from_shebang "${1}")" >> "${GITHUB_OUTPUT}"

@@ -20,4 +20,4 @@ runs:
     - name:  run find-shell-from-shebang.sh
       id:    id-shell
       shell: bash
-      run:   .github/scripts/find-shell-from-shebang.sh ${{ inputs.files }}
+      run:   .github/scripts/find-shell-from-shebang.sh "${{ inputs.file }}"
