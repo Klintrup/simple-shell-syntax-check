@@ -71,13 +71,13 @@ jobs:
         with:
           file: "${{ github.workspace }}/${{ matrix.filename }}"
       - name: Install fish
-        if:   startsWith("${{ steps.find-shell.outputs.shell }}", "fish") == "true"
+        if:  steps.find-shell.outputs.shell == 'fish'
         run: sudo apt-get install -y fish
       - name: Install ksh
-        if:   startsWith("${{ steps.find-shell.outputs.shell }}", "ksh") == "true"
+        if:   steps.find-shell.outputs.shell == 'ksh'
         run: sudo apt-get install -y ksh
       - name: Install zsh
-        if:   startsWith("${{ steps.find-shell.outputs.shell }}", "zsh") == "true"
+        if:   steps.find-shell.outputs.shell == 'zsh'
         run: sudo apt-get install -y zsh
       - name: syntax-${{ matrix.filename }}
         id:   matrix-syntax
@@ -98,13 +98,13 @@ jobs:
         with:
           file: ${{ github.workspace }}/${{ matrix.filename }}
       - name: Install fish
-        if:   startsWith(${{ steps.find-shell.outputs.shell }}, fish) == true
+        if:  steps.find-shell.outputs.shell == 'fish'
         run: sudo apt-get install -y fish
       - name: Install ksh
-        if:   startsWith(${{ steps.find-shell.outputs.shell }}, ksh) == true
+        if:   steps.find-shell.outputs.shell == 'ksh'
         run: sudo apt-get install -y ksh
       - name: Install zsh
-        if:   startsWith(${{ steps.find-shell.outputs.shell }}, zsh) == true
+        if:   steps.find-shell.outputs.shell == 'zsh'
         run: sudo apt-get install -y zsh
       - name: Check syntax
         uses: ./
