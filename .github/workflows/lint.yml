@@ -35,7 +35,7 @@ jobs:
         run:  |
                 (
                   echo -n "files={\"include\":["
-                  for filename in ${{ steps.changed-files-sh.outputs.all_changed_files }}}
+                  for filename in ${{ steps.changed-files-sh.outputs.all_changed_files }}
                   do
                     echo -n "{ \"filename\": \"${filename}\" }, "
                   done
