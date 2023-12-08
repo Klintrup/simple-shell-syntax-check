@@ -38,7 +38,7 @@ jobs:
                   for filename in ${{ steps.changed-files-sh.outputs.all_changed_files }}}
                   do
                     echo -n "{ \"filename\": \"${filename}\" }, "
-                  done|sed -E -e s/",[[:blank:]]{1,}$"//
+                  done
                   echo -n "]}" 
                 ) | tee -a ${GITHUB_OUTPUT}
       - name: Get changed files
@@ -55,7 +55,7 @@ jobs:
                   for filename in $(find examples/ -name '*.sh')
                   do
                     echo -n "{ \"filename\": \"${filename}\" }, "
-                  done|sed s/,$//
+                  done
                   echo -n "]}" 
                 ) | tee -a ${GITHUB_OUTPUT}
   sh-verify-examples:
@@ -69,7 +69,7 @@ jobs:
       - uses: ./.github/actions/find-shell-from-shebang/
         id: find-shell
         with:
-          file: "${{ matrix.filename }}"
+          file: "${{ github.workspace }}/${{ matrix.filename }}"
       - name: Install fish
         if:   startsWith("${{ steps.find-shell.outputs.shell }}", "fish") == "true"
         run: sudo apt-get install -y fish
@@ -96,7 +96,7 @@ jobs:
       - uses: ./.github/actions/find-shell-from-shebang/
         id: find-shell
         with:
-          file: ${{ matrix.filename }}
+          file: ${{ github.workspace }}/${{ matrix.filename }}
       - name: Install fish
         if:   startsWith(${{ steps.find-shell.outputs.shell }}, fish) == true
         run: sudo apt-get install -y fish
