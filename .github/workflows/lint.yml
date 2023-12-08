@@ -15,7 +15,6 @@ jobs:
     outputs:
       sh-changed-files:  ${{ steps.changed-files-sh.outputs.all_changed_files }}
       sh-any-changed:    ${{ steps.changed-files-sh.outputs.any_changed }}
-      sh-changed-matrix: ${{ steps.matrix-changed-sh.outputs.files }}
       md-changed-files:  ${{ steps.changed-files-md.outputs.all_changed_files }}
       md-any-changed:    ${{ steps.changed-files-md.outputs.any_changed }}
       sh-examples:       ${{ steps.matrix-examples-sh.outputs.files }}
@@ -50,71 +49,35 @@ jobs:
       - name: find examples
         id:   matrix-examples-sh
         run:  |
-                (
-                  echo -n "files={\"include\":["
-                  for filename in $(find examples/ -name '*.sh')
-                  do
-                    echo -n "{ \"filename\": \"${filename}\" }, "
-                  done
-                  echo -n "]}" 
-                ) | tee -a ${GITHUB_OUTPUT}
+                echo "sh-examples= <EOF"    >> ${GITHUB_OUTPUT}
+                find examples/ -name '*.sh' >> ${GITHUB_OUTPUT}
+                echo "EOF"                  >> ${GITHUB_OUTPUT}
   sh-verify-examples:
     name: sh-verify-examples
     runs-on: ubuntu-latest
     needs: list-files
-    strategy:
-      matrix: "${{ fromJson(needs.list-files.outputs.sh-examples) }}"
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/find-shell-from-shebang/
-        id: find-shell
-        with:
-          file: "${{ github.workspace }}/${{ matrix.filename }}"
-      - name: Install fish
-        if:  steps.find-shell.outputs.shell == 'fish'
-        run: sudo apt-get install -y fish
-      - name: Install ksh
-        if:   steps.find-shell.outputs.shell == 'ksh'
-        run: sudo apt-get install -y ksh
-      - name: Install zsh
-        if:   steps.find-shell.outputs.shell == 'zsh'
-        run: sudo apt-get install -y zsh
-      - name: syntax-${{ matrix.filename }}
+      - name: Install fish ksh zsh
+        run: sudo apt-get install -y fish ksh zsh
+      - name: syntax
         id:   matrix-syntax
         uses: ./
         with:
-          files: ${{ matrix.filename }}
+          files: ${{ needs.list-files.outputs.sh-examples }}
   sh-check-changed:
     name: Check changed files
     needs: [ list-files ]
     if:    needs.list-files.outputs.sh-any-changed == 'true'
     runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJson(needs.list-files.outputs.sh-changed-matrix) }}
     steps:
       - uses: actions/checkout@v4
-      - name: debug
-        run: |
-          echo ${{ matrix.filename }}
-          env
-          find ${{ github.workspace }} -type f
-      - uses: ./.github/actions/find-shell-from-shebang/
-        id: find-shell
-        with:
-          file: ${{ github.workspace }}/${{ matrix.filename }}
-      - name: Install fish
-        if:  steps.find-shell.outputs.shell == 'fish'
-        run: sudo apt-get install -y fish
-      - name: Install ksh
-        if:   steps.find-shell.outputs.shell == 'ksh'
-        run: sudo apt-get install -y ksh
-      - name: Install zsh
-        if:   steps.find-shell.outputs.shell == 'zsh'
-        run: sudo apt-get install -y zsh
+      - name: Install fish ksh zsh
+        run:  sudo apt-get install -y fish ksh zsh
       - name: Check syntax
         uses: ./
         with:
-          files: ${{ matrix.filename }}
+          files: ${{ needs.list-files.outputs.sh-changed-files }}
   prettier:
     permissions:
       contents: write
