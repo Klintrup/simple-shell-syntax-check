@@ -74,14 +74,11 @@ print_header() {
 }
 
 print_summary() {
-  echo "Arguments: $@"
   if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
 
   local fn_errors="${3}"
   local fn_warnings="${2}"
   local fn_num_files="${1}"
-
-  echo "${fn_num_files}, ${fn_warnings}, ${fn_errors}"
 
   # print summary if files were checked
   if [ "${fn_num_files}" -gt "0" ]; then
@@ -104,6 +101,12 @@ print_summary() {
 declare -a files
 declare -i errors=0
 declare -i warnings=0
+
+if [ "${GITHUB_STEP_SUMMARY+x}" == "x" ]
+then
+ GITHUB_STEP_SUMMARY=$(mktemp)
+ trap 'cat ${GITHUB_STEP_SUMMARY};rm -f ${GITHUB_STEP_SUMMARY}' EXIT
+fi
 
 trap 'print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"' EXIT
 
