@@ -18,7 +18,8 @@ locate all .sh files in the current folder.
 
 | Input | required | Description         |
 | ----- | -------- | ------------------- |
-| files | no       | Files to be checked |
+| files | no       | list of files to be checked |
+| install_missing_shell | no | Install shell if its missing from the runner |
 
 ## Output
 
@@ -82,11 +83,9 @@ Or you can install all "missing" shells in a single command
   with:
     files: |
       **.sh
-- name: Install shells
-  if: steps.changed-files.outputs.any_changed == 'true'
-  run: sudo apt-get install -y fish ksh zsh
 - uses: Klintrup/simple-shell-syntax-check@v2
   if: steps.changed-files.outputs.any_changed == 'true'
   with:
     files: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
+    install_missing_shell: true
 ```
