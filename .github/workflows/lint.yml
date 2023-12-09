@@ -64,6 +64,9 @@ jobs:
     needs: list-files
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
       - name: Prettify code
         uses: creyD/prettier_action@v4.3
         with:
