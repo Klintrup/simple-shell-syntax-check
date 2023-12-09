@@ -1,9 +1,10 @@
 on:
   pull_request:
+    branches: [ main ]
   push:
     branches: [ main ]
 
-name: lint-shell
+name: lint
 
 permissions:
   contents: read
