@@ -27,12 +27,12 @@ Outputs status of each file to the action summary
 
 ## supported shells
 
-- sh
-- bash
-- dash
-- fish
-- ksh
-- zsh
+- `sh`
+- `bash`
+- `dash`
+- `fish`
+- `ksh`
+- `zsh`
 
 The shell must exist on the runner to be able to test. If the shell doesn't
 exist, that test will fail.
