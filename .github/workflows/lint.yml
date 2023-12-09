@@ -37,7 +37,10 @@ jobs:
              **.md
   sh-verify-examples:
     name: sh-verify-examples
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ubuntu-release: [ '22.04', '20.04' ]
+    runs-on: ubuntu-${{ matrix.ubuntu-release }}
     steps:
       - uses: actions/checkout@v4
       - name: syntax
