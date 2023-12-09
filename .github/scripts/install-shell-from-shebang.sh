@@ -48,7 +48,7 @@ install_shell_if_missing() {
   fi
 }
 
-
+declare -a files
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
     files+=("${line}")
