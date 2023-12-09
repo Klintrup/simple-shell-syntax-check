@@ -39,6 +39,7 @@ jobs:
     name: sh-verify-examples
     strategy:
       matrix:
+        # https://github.com/actions/runner-images
         ubuntu-release: [ '20.04', '22.04' ]
     runs-on: ubuntu-${{ matrix.ubuntu-release }}
     steps:
