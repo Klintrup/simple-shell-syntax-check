@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   list-files:
-    name: list-files
+    name: Find changed files
     runs-on: ubuntu-latest
     outputs:
       sh-changed-files:  ${{ steps.changed-files-sh.outputs.all_changed_files }}
@@ -36,7 +36,7 @@ jobs:
           files: |
              **.md
   sh-verify-examples:
-    name: sh-verify-examples
+    name: Verify examples
     strategy:
       matrix:
         # https://github.com/actions/runner-images
@@ -50,7 +50,7 @@ jobs:
           files: examples/sh-example.sh examples/ksh-example.sh examples/zsh-example.sh examples/bash-example.sh examples/dash-example.sh examples/fish-example.sh
           install_missing_shell: true
   sh-check-changed:
-    name: Check changed files
+    name: Check changed shellscripts
     needs: list-files
     if:    needs.list-files.outputs.sh-any-changed == 'true'
     runs-on: ubuntu-latest
@@ -62,6 +62,7 @@ jobs:
           files: ${{ needs.list-files.outputs.sh-changed-files }}
           install_missing_shell: true
   prettier:
+    name: Prettify changed markdown files
     permissions:
       contents: write
     runs-on: ubuntu-latest
