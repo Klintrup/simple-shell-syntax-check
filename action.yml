@@ -1,11 +1,9 @@
-
 name: "Simple Shell Syntax Check"
 author: "Søren Klintrup <soren@klintrup.dk>"
 description: "Uses shell '-n' to syntax check shellscripts"
 branding:
   icon: "terminal"
   color: "gray-dark"
-
 inputs:
   files:
     description: "Files to check"
@@ -15,7 +13,6 @@ inputs:
     description: "identify shell and install if missing"
     required: false
     default: "false"
-
 runs:
   using: "composite"
   steps:
