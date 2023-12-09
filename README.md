@@ -19,7 +19,7 @@ locate all .sh files in the current folder.
 | Input                 | required | Description                                  |
 | --------------------- | -------- | -------------------------------------------- |
 | files                 | no       | list of files to be checked                  |
-| install_missing_shell | no       | Install shell if its missing from the runner |
+| install_missing_shell | no       | Find missing shells and install |
 
 ## Output
 
