@@ -22,7 +22,7 @@ runs:
     - name:  install missing shell
       shell: bash
       if:    ${{ inputs.install_missing_shell == 'true' }}
-      run:   .github/scripts/install-missing-shell.sh ${{ inputs.install_missing_shell }}
+      run:   .github/scripts/install-shell-from-shebang.sh ${{ inputs.install_missing_shell }}
     - name:  run simple-shell-syntax-check.sh
       shell: bash
       run:   .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
