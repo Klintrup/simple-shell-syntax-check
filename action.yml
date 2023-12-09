@@ -15,7 +15,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
     - name:  run simple-shell-syntax-check.sh
       shell: bash
       run:  |

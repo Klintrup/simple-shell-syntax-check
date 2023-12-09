@@ -28,17 +28,6 @@ jobs:
         with:
           files: |
             **.sh
-      - name: matrix-changed-sh
-        id:   matrix-changed-sh
-        run:  |
-                (
-                  echo -n "files={\"include\":["
-                  for filename in ${{ steps.changed-files-sh.outputs.all_changed_files }}
-                  do
-                    echo -n "{ \"filename\": \"${filename}\" }, "
-                  done
-                  echo -n "]}" 
-                ) | tee -a ${GITHUB_OUTPUT}
       - name: Get changed files
         id: changed-files-md
         uses: tj-actions/changed-files@v40
@@ -48,7 +37,6 @@ jobs:
   sh-verify-examples:
     name: sh-verify-examples
     runs-on: ubuntu-latest
-    needs: list-files
     steps:
       - uses: actions/checkout@v4
       - name: Install fish ksh zsh
@@ -63,7 +51,7 @@ jobs:
             examples/dash-example.sh
   sh-check-changed:
     name: Check changed files
-    needs: [ list-files ]
+    needs: list-files
     if:    needs.list-files.outputs.sh-any-changed == 'true'
     runs-on: ubuntu-latest
     steps:
