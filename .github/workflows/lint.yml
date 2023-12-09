@@ -1,0 +1,78 @@
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+name: lint
+
+permissions:
+  contents: read
+
+jobs:
+  list-files:
+    name: list-files
+    runs-on: ubuntu-latest
+    outputs:
+      sh-changed-files:  ${{ steps.changed-files-sh.outputs.all_changed_files }}
+      sh-any-changed:    ${{ steps.changed-files-sh.outputs.any_changed }}
+      md-changed-files:  ${{ steps.changed-files-md.outputs.all_changed_files }}
+      md-any-changed:    ${{ steps.changed-files-md.outputs.any_changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files-sh
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            **.sh
+      - name: Get changed files
+        id: changed-files-md
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+             **.md
+  sh-verify-examples:
+    name: sh-verify-examples
+    strategy:
+      matrix:
+        # https://github.com/actions/runner-images
+        ubuntu-release: [ '20.04', '22.04' ]
+    runs-on: ubuntu-${{ matrix.ubuntu-release }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: syntax
+        uses: ./
+        with:
+          files: examples/sh-example.sh examples/ksh-example.sh examples/zsh-example.sh examples/bash-example.sh examples/dash-example.sh examples/fish-example.sh
+          install_missing_shell: true
+  sh-check-changed:
+    name: Check changed files
+    needs: list-files
+    if:    needs.list-files.outputs.sh-any-changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check syntax
+        uses: ./
+        with:
+          files: ${{ needs.list-files.outputs.sh-changed-files }}
+          install_missing_shell: true
+  prettier:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    if:   needs.list-files.outputs.md-any-changed == 'true'
+    needs: list-files
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - name: Prettify code
+        uses: creyD/prettier_action@v4.3
+        with:
+          prettier_options: --write ${{ needs.list-files.outputs.md-changed-files }}

@@ -3,6 +3,17 @@
 set -o nounset
 set -o pipefail
 
+write_to_summary() {
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+  
+  local file="${1}"
+  local shell="${2}"
+  local status="${3}"
+  local comment="${4}"
+
+  echo "| \`${file}\` | \`${shell}\` | ${status} | ${comment} |" >> "${GITHUB_STEP_SUMMARY}"
+}
+
 check_shell_syntax() {
   local file="${1}"
   local shell="${2}"
@@ -11,10 +22,10 @@ check_shell_syntax() {
   syntaxexitcode="${?}"
   if [ "${syntaxexitcode}" -eq 0 ]; then
     echo "${file} check OK with ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :white_check_mark: | |" >> "${GITHUB_STEP_SUMMARY}"
+    write_to_summary "${file}" "${shell}" ":white_check_mark:" ""
   else
     echo "${file} check FAIL with ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :no_entry: | see run log |" >> "${GITHUB_STEP_SUMMARY}"
+    write_to_summary "${file}" "${shell}" ":no_entry:" "syntax error"
     ((errors++))
   fi
 }
@@ -53,7 +64,52 @@ find_shell_from_shebang() {
   echo "${fn_shell}"
 }
 
+print_header() {
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+  echo "" >> "${GITHUB_STEP_SUMMARY}"
+  echo "# Checked files" >> "${GITHUB_STEP_SUMMARY}"
+  echo "" >> "${GITHUB_STEP_SUMMARY}"
+  echo "| file | shell | status | comment |" >> "${GITHUB_STEP_SUMMARY}"
+  echo "| ---- | ----- | :----: | ------- |" >> "${GITHUB_STEP_SUMMARY}"
+}
+
+print_summary() {
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+
+  local fn_errors="${3}"
+  local fn_warnings="${2}"
+  local fn_num_files="${1}"
+
+  # print summary if files were checked
+  if [ "${fn_num_files}" -gt "0" ]; then
+    # shellcheck disable=SC2129
+    echo "" >> "${GITHUB_STEP_SUMMARY}"
+    echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
+    echo "" >> "${GITHUB_STEP_SUMMARY}"
+    echo "::group::Summary"
+    if [ "${fn_errors}" -eq "0" ] && [ "${fn_warnings}" -eq "0" ]; then
+      echo "No errors or warnings"
+      echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
+    else
+      echo "Errors: ${fn_errors}, Warnings: ${fn_warnings}"
+      echo ":no_entry: Errors: ${fn_errors}, :warning: Warnings: ${fn_warnings}" >> "${GITHUB_STEP_SUMMARY}"
+    fi
+    echo "::endgroup::"
+  fi
+}
+
 declare -a files
+declare -i errors=0
+declare -i warnings=0
+
+if [ "${GITHUB_STEP_SUMMARY+x}" == "x" ]
+then
+ GITHUB_STEP_SUMMARY=$(mktemp)
+ trap 'cat ${GITHUB_STEP_SUMMARY};rm -f ${GITHUB_STEP_SUMMARY}' EXIT
+fi
+
+trap 'print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"' EXIT
+
 if [ "${#}" -eq "0" ]; then
   while IFS= read -r line; do
     files+=("${line}")
@@ -62,16 +118,9 @@ else
   files=("$@")
 fi
 
-declare -i errors=0
-declare -i warnings=0
-
 # check if files array contains elements and print summary header
 if [ "${#files[@]}" -gt "0" ]; then
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "# Checked files" >> "${GITHUB_STEP_SUMMARY}"
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "| file | shell | status | comment |" >> "${GITHUB_STEP_SUMMARY}"
-  echo "| ---- | ----- | :----: | ------- |" >> "${GITHUB_STEP_SUMMARY}"
+  print_header
 fi
 
 for file in "${files[@]}"; do
@@ -87,31 +136,13 @@ for file in "${files[@]}"; do
       check_shell_syntax "${file}" "${shell}"
     else
       echo "Unavailable shell: ${shell}"
-      echo "| \`${file}\` | \`${shell}\` | :warning: | shell is not installed |" >> "${GITHUB_STEP_SUMMARY}"
+      write_to_summary "${file}" "${shell}" ":warning:" "shell is not installed"
       ((warnings++))
     fi
   else
     echo "Unsupported shell: ${shell}"
-    echo "| \`${file}\` | \`${shell}\` | :warning: | shell is not supported |" >> "${GITHUB_STEP_SUMMARY}"
+    write_to_summary "${file}" "${shell}" ":warning:" "shell is not supported"
     ((warnings++))
   fi
   echo "::endgroup::"
 done
-
-# print summary if files were checked
-if [ "${#files[@]}" -gt "0" ]; then
-  # shellcheck disable=SC2129
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "# Summary" >> "${GITHUB_STEP_SUMMARY}"
-  echo "" >> "${GITHUB_STEP_SUMMARY}"
-  echo "::group::Summary"
-  if [ "${errors}" -eq "0" ] && [ "${warnings}" -eq "0" ]; then
-    echo "No errors or warnings"
-    echo ":white_check_mark: No errors or warnings" >> "${GITHUB_STEP_SUMMARY}"
-  else
-    echo "Errors: ${errors}, Warnings: ${warnings}"
-    echo ":no_entry: Errors: ${errors}, :warning: Warnings: ${warnings}" >> "${GITHUB_STEP_SUMMARY}"
-    exit 1
-  fi
-  echo "::endgroup::"
-fi

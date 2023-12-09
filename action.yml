@@ -11,10 +11,18 @@ inputs:
     description: "Files to check"
     required: false
     default: ""
+  install_missing_shell:
+    description: "identify shell and install if missing"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
   steps:
+    - name:  install missing shell
+      shell: bash
+      if:    ${{ inputs.install_missing_shell == 'true' }}
+      run:   .github/scripts/install-shell-from-shebang.sh ${{ inputs.files }}
     - name:  run simple-shell-syntax-check.sh
       shell: bash
       run:   .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
