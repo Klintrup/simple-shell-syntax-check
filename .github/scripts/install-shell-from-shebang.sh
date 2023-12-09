@@ -37,8 +37,8 @@ install_shell_if_missing() {
 }
 
 while [ "${#}" -gt "0" ]; do
-  echo ::group::"${shell}"
   shell="$(find_shell_from_shebang "${1}")"
+  echo ::group::"${shell}"
   install_shell_if_missing "${shell}"
   echo "shell identified as ${shell}"
   echo ::endgroup::
