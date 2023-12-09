@@ -49,6 +49,20 @@ jobs:
         with:
           files: examples/sh-example.sh examples/ksh-example.sh examples/zsh-example.sh examples/bash-example.sh examples/dash-example.sh examples/fish-example.sh
           install_missing_shell: true
+  sh-verify-all:
+    name: sh-verify-all
+    strategy:
+      matrix:
+        # https://github.com/actions/runner-images
+        ubuntu-release: [ '20.04', '22.04' ]
+    runs-on: ubuntu-${{ matrix.ubuntu-release }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: syntax
+        uses: ./
+        with:
+          install_missing_shell: true
+
   sh-check-changed:
     name: Check changed files
     needs: list-files

@@ -48,7 +48,16 @@ install_shell_if_missing() {
   fi
 }
 
-while [ "${#}" -gt "0" ]; do
+
+if [ "${#}" -eq "0" ]; then
+  while IFS= read -r line; do
+    files+=("${line}")
+  done < <(find . -type f -name "*.sh" -exec realpath --relative-to=. {} \;)
+else
+  files=("$@")
+fi
+
+for file in "${files[@]}"; do
   echo ::group::"${1}"
   shell="$(find_shell_from_shebang "${1}")"
   if is_supported_shell "${shell}"; then
