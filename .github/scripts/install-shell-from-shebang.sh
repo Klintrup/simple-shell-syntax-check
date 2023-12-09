@@ -58,8 +58,9 @@ else
 fi
 
 for file in "${files[@]}"; do
-  echo ::group::"${1}"
-  shell="$(find_shell_from_shebang "${1}")"
+  unset shell
+  echo ::group::"${file}"
+  shell="$(find_shell_from_shebang "${file}")"
   if is_supported_shell "${shell}"; then
     echo "shell identified as ${shell}"
     install_shell_if_missing "${shell}"
