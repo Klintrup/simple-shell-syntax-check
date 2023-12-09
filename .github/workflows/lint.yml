@@ -45,7 +45,7 @@ jobs:
         id:   syntax
         uses: ./
         with:
-          files: examples/sh-example.sh examples/ksh-example.sh examples/dash-example.sh
+          files: examples/sh-example.sh examples/ksh-example.sh examples/zsh-example.sh examples/bash-example.sh examples/dash-example.sh examples/fish-example.sh
   sh-check-changed:
     name: Check changed files
     needs: list-files
