@@ -18,5 +18,7 @@ runs:
     - name:  run simple-shell-syntax-check.sh
       shell: bash
       run:  |
-       ls -l ${{ inputs.files }}
+       for file in ${{ inputs.files }};do
+         ls -l ${{ inputs.files }}
+        done
        .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
