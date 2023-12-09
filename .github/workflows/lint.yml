@@ -39,7 +39,7 @@ jobs:
     name: sh-verify-examples
     strategy:
       matrix:
-        ubuntu-release: [ '22.04', '20.04' ]
+        ubuntu-release: [ '20.04', '22.04' ]
     runs-on: ubuntu-${{ matrix.ubuntu-release }}
     steps:
       - uses: actions/checkout@v4
