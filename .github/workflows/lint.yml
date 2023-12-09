@@ -39,13 +39,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install fish ksh zsh
-        run: sudo apt-get install -y fish ksh zsh
       - name: syntax
-        id:   syntax
         uses: ./
         with:
           files: examples/sh-example.sh examples/ksh-example.sh examples/zsh-example.sh examples/bash-example.sh examples/dash-example.sh examples/fish-example.sh
+          install_missing_shell: true
   sh-check-changed:
     name: Check changed files
     needs: list-files
@@ -53,12 +51,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install fish ksh zsh
-        run:  sudo apt-get install -y fish ksh zsh
       - name: Check syntax
         uses: ./
         with:
           files: ${{ needs.list-files.outputs.sh-changed-files }}
+          install_missing_shell: true
   prettier:
     permissions:
       contents: write
