@@ -57,16 +57,14 @@ else
   files=("$@")
 fi
 
-for file in "${files[@]}"; do
-  unset shell
-  echo ::group::"${file}"
-  shell="$(find_shell_from_shebang "${file}")"
-  if is_supported_shell "${shell}"; then
-    echo "shell identified as ${shell}"
-    install_shell_if_missing "${shell}"
+for for_file in "${files[@]}"; do
+  echo ::group::"${for_file}"
+  shell="$(find_shell_from_shebang "${for_file}")"
+  if is_supported_shell "${for_file}"; then
+    echo "shell identified as ${for_file}" 
+    install_shell_if_missing "${for_file}"
   else
-    echo "unsupported shell ${shell}, skipping"
+    echo "unsupported shell ${for_file}, skipping"
   fi
   echo ::endgroup::
-  shift
 done
