@@ -61,10 +61,10 @@ jobs:
       - name: Install fish ksh zsh
         run: sudo apt-get install -y fish ksh zsh
       - name: syntax
-        id:   matrix-syntax
+        id:   syntax
         uses: ./
         with:
-          files: ${{ needs.list-files.outputs.sh-examples }}
+          files: "${{ needs.list-files.outputs.sh-examples }}"
   sh-check-changed:
     name: Check changed files
     needs: [ list-files ]
