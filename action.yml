@@ -19,6 +19,6 @@ runs:
       shell: bash
       run:  |
        for file in ${{ inputs.files }};do
-         ls -l ${{ inputs.files }}
+         ls -l ${file}
         done
        .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
