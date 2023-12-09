@@ -15,6 +15,10 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/checkout@v4
     - name:  run simple-shell-syntax-check.sh
       shell: bash
-      run:   .github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
+      run:  |
+       for file in ${{ inputs.files }}; do
+          echo ${file}
+       done | xargs -n100 -P1 .github/scripts/simple-shell-syntax-check.sh
