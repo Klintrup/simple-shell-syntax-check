@@ -4,8 +4,8 @@ set -o nounset
 set -o pipefail
 
 write_to_summary() {
-  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
-  
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0; fi
+
   local file="${1}"
   local shell="${2}"
   local status="${3}"
@@ -56,16 +56,15 @@ find_shell_from_shebang() {
   local fn_shell
   fn_shell=$(head -n 1 "${fn_file}" | awk 'BEGIN{FS="/"} /^#!\/usr\/bin\/env/{split($NF,a," "); print a[2]; exit} /^#!\//{print $NF; exit}')
   # if no shebang, assume bash
-  if [ -z "${fn_shell}" ]
-  then
-   echo "unable to identify shell for ${fn_file}, assuming bash"
-   fn_shell="bash"
+  if [ -z "${fn_shell}" ]; then
+    echo "unable to identify shell for ${fn_file}, assuming bash"
+    fn_shell="bash"
   fi
   echo "${fn_shell}"
 }
 
 print_header() {
-  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0; fi
   echo "" >> "${GITHUB_STEP_SUMMARY}"
   echo "# Checked files" >> "${GITHUB_STEP_SUMMARY}"
   echo "" >> "${GITHUB_STEP_SUMMARY}"
@@ -74,7 +73,7 @@ print_header() {
 }
 
 print_summary() {
-  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0;fi
+  if [ -z "${GITHUB_STEP_SUMMARY+x}" ]; then return 0; fi
 
   local fn_errors="${3}"
   local fn_warnings="${2}"
@@ -102,10 +101,9 @@ declare -a files
 declare -i errors=0
 declare -i warnings=0
 
-if [ "${GITHUB_STEP_SUMMARY+x}" == "x" ]
-then
- GITHUB_STEP_SUMMARY=$(mktemp)
- trap 'cat ${GITHUB_STEP_SUMMARY};rm -f ${GITHUB_STEP_SUMMARY}' EXIT
+if [ "${GITHUB_STEP_SUMMARY+x}" == "x" ]; then
+  GITHUB_STEP_SUMMARY=$(mktemp)
+  trap 'cat ${GITHUB_STEP_SUMMARY};rm -f ${GITHUB_STEP_SUMMARY}' EXIT
 fi
 
 trap 'print_summary "${#files[@]}" "${errors:-0}" "${warnings:-0}"' EXIT

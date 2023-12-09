@@ -10,7 +10,7 @@ find_shell_from_shebang() {
 is_supported_shell() {
   local shell="${1}"
   case "${shell}" in
-    sh|bash|dash|fish|ksh|zsh)
+    sh | bash | dash | fish | ksh | zsh)
       return 0
       ;;
     *)
@@ -23,18 +23,18 @@ install_package() {
   local package="${1}"
   . /etc/os-release
   case $ID in
-      debian|ubuntu|linuxmint)
-          sudo apt-get install -y "${package}"
-          ;;
-      centos|rhel|fedora)
-          sudo yum install -y "${package}"
-          ;;
-      opensuse*)
-          sudo zypper install -y "${package}"
-          ;;
-      *)
-          echo "Unsupported distribution, please install ${package} manually."
-          ;;
+    debian | ubuntu | linuxmint)
+      sudo apt-get install -y "${package}"
+      ;;
+    centos | rhel | fedora)
+      sudo yum install -y "${package}"
+      ;;
+    opensuse*)
+      sudo zypper install -y "${package}"
+      ;;
+    *)
+      echo "Unsupported distribution, please install ${package} manually."
+      ;;
   esac
 }
 
@@ -61,7 +61,7 @@ for for_file in "${files[@]}"; do
   echo ::group::"${for_file}"
   shell="$(find_shell_from_shebang "${for_file}")"
   if is_supported_shell "${for_file}"; then
-    echo "shell identified as ${for_file}" 
+    echo "shell identified as ${for_file}"
     install_shell_if_missing "${for_file}"
   else
     echo "unsupported shell ${for_file}, skipping"

@@ -62,7 +62,6 @@ jobs:
         uses: ./
         with:
           install_missing_shell: true
-
   sh-check-changed:
     name: Check changed files
     needs: list-files
