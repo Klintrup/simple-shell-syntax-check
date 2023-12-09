@@ -21,7 +21,8 @@ runs:
   steps:
     - name:  install missing shell
       shell: bash
-      if:    ${{ inputs.install_missing_shell == 'true' }}
+      # only run if install_missing_shell is true and if os is ubuntu
+      if:    ${{ (inputs.install_missing_shell == 'true') && (runner.os == 'Linux') }} 
       run:   .github/scripts/install-shell-from-shebang.sh ${{ inputs.files }}
     - name:  run simple-shell-syntax-check.sh
       shell: bash
