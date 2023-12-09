@@ -17,7 +17,6 @@ jobs:
       sh-any-changed:    ${{ steps.changed-files-sh.outputs.any_changed }}
       md-changed-files:  ${{ steps.changed-files-md.outputs.all_changed_files }}
       md-any-changed:    ${{ steps.changed-files-md.outputs.any_changed }}
-      sh-examples:       ${{ steps.find-examples-sh.outputs.sh-examples }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,12 +45,6 @@ jobs:
         with:
           files: |
              **.md
-      - name: find examples
-        id:   find-examples-sh
-        run:  |
-                echo "sh-examples<<EOF"     >> ${GITHUB_OUTPUT}
-                find examples/ -name '*.sh' -type f >> ${GITHUB_OUTPUT}
-                echo "EOF"                  >> ${GITHUB_OUTPUT}
   sh-verify-examples:
     name: sh-verify-examples
     runs-on: ubuntu-latest
@@ -64,7 +57,10 @@ jobs:
         id:   syntax
         uses: ./
         with:
-          files: "${{ needs.list-files.outputs.sh-examples }}"
+          files: |
+            examples/sh-example.sh
+            examples/ksh-example.sh
+            examples/dash-example.sh
   sh-check-changed:
     name: Check changed files
     needs: [ list-files ]
