@@ -16,9 +16,9 @@ locate all .sh files in the current folder.
 
 ## Inputs
 
-| Input                 | required | Description                                  |
-| --------------------- | -------- | -------------------------------------------- |
-| files                 | no       | list of files to be checked                  |
+| Input                 | required | Description                     |
+| --------------------- | -------- | ------------------------------- |
+| files                 | no       | list of files to be checked     |
 | install_missing_shell | no       | Find missing shells and install |
 
 ## Output
