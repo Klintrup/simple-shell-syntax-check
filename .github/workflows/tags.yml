@@ -15,6 +15,7 @@ jobs:
     - name: Update major version tag
       run: |
         VERSION=${GITHUB_REF#refs/tags/}
+        # if VERSION is v1.2.3, MAJOR is v1
         MAJOR=${VERSION%%.*}
         git config --global user.name 'Søren Klintrup'
         git config --global user.email 'Klintrup@users.noreply.github.com'
@@ -34,7 +35,8 @@ jobs:
     - name: Update major/minor version tag
       run: |
         VERSION=${GITHUB_REF#refs/tags/}
-        MAJORMINOR=${VERSION%%.*}
+        # if VERSION is v1.2.3, MAJORMINOR is v1.2
+        MAJORMINOR=${VERSION%.*}
         git config --global user.name 'Søren Klintrup'
         git config --global user.email 'Klintrup@users.noreply.github.com'
         # check if ${MAJORMINOR} matches regex "v[0-9]+.[0-9]+"
