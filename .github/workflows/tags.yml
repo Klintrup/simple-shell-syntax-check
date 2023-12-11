@@ -1,0 +1,44 @@
+name: Update Major Release Tag
+
+on:
+  release:
+    types: [created]
+jobs:
+  tag-major:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Update major version tag
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        MAJOR=${VERSION%%.*}
+        git config --global user.name 'Søren Klintrup'
+        git config --global user.email 'Klintrup@users.noreply.github.com'
+        # check if ${MAJOR} matches regex "v[0-9]+"
+        if [[ ${MAJOR} =~ ^v[0-9]+$ ]]
+        then
+          git tag -f ${MAJOR}
+          git push origin ${MAJOR} --force
+        else
+          echo "${MAJOR} does not match regex v[0-9]+"
+          exit 1
+        fi
+  tag-majorminor:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Update major/minor version tag
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        MAJORMINOR=${VERSION%%.*}
+        git config --global user.name 'Søren Klintrup'
+        git config --global user.email 'Klintrup@users.noreply.github.com'
+        # check if ${MAJORMINOR} matches regex "v[0-9]+.[0-9]+"
+        if [[ ${MAJORMINOR} =~ ^v[0-9]+\.[0-9]+$ ]]
+        then
+          git tag -f ${MAJORMINOR}
+          git push origin ${MAJORMINOR} --force
+        else
+          echo "${MAJORMINOR} does not match regex v[0-9]+\.[0-9]+"
+          exit 1
+        fi
