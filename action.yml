@@ -16,6 +16,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: find-all-files
+      shell: bash
+      run:   find . -type f
     - name:  install missing shell
       shell: bash
       # only run if install_missing_shell is true and if os is ubuntu
