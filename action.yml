@@ -20,7 +20,7 @@ runs:
       shell: bash
       # only run if install_missing_shell is true and if os is ubuntu
       if:    ${{ (inputs.install_missing_shell == 'true') && (runner.os == 'Linux') }} 
-      run:   ${{ github.action_path }}/.github/scripts/install-shell-from-shebang.sh ${{ inputs.files }}
+      run:   ${{ github.action_path }}/install-shell-from-shebang.sh ${{ inputs.files }}
     - name:  run simple-shell-syntax-check.sh
       shell: bash
-      run:   ${{ github.action_path }}/.github/scripts/simple-shell-syntax-check.sh ${{ inputs.files }}
+      run:   ${{ github.action_path }}/simple-shell-syntax-check.sh ${{ inputs.files }}
