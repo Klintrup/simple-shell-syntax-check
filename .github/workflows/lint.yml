@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: syntax
-        uses: ./
+        uses: Klintrup/simple-shell-syntax-check@move-shellscript-files
         with:
           files: examples/sh-example.sh examples/ksh-example.sh examples/zsh-example.sh examples/bash-example.sh examples/dash-example.sh examples/fish-example.sh
           install_missing_shell: true
@@ -59,7 +59,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: syntax
-        uses: ./
+        uses: Klintrup/simple-shell-syntax-check@move-shellscript-files
         with:
           install_missing_shell: true
   sh-check-changed:
@@ -70,7 +70,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check syntax
-        uses: ./
+        uses: Klintrup/simple-shell-syntax-check@move-shellscript-files
         with:
           files: ${{ needs.list-files.outputs.sh-changed-files }}
           install_missing_shell: true

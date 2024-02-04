@@ -23,7 +23,4 @@ runs:
       run:   ${{ github.action_path }}/install-shell-from-shebang.sh ${{ inputs.files }}
     - name:  run simple-shell-syntax-check.sh
       shell: bash
-      run:   |
-        echo "${{ github.action_path }}"
-        find "${{ github.action_path }}" -type f
-        ${{ github.action_path }}/simple-shell-syntax-check.sh ${{ inputs.files }}
+      run:   ${{ github.action_path }}/simple-shell-syntax-check.sh ${{ inputs.files }}
