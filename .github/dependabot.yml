@@ -3,4 +3,12 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
+      timezone: "Europe/Copenhagen"
+      time: "10:00"
+    commit-message:
+      prefix: "bot:"
+    reviewers:
+      - "Klintrup"
+    rebase-strategy: "auto"
+    
