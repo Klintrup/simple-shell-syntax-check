@@ -11,7 +11,7 @@ jobs:
   tag-major:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     - name: Update major version tag
       run: |
         VERSION=${GITHUB_REF#refs/tags/}
@@ -31,7 +31,7 @@ jobs:
   tag-majorminor:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     - name: Update major/minor version tag
       run: |
         VERSION=${GITHUB_REF#refs/tags/}

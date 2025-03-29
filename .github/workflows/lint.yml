@@ -19,7 +19,7 @@ jobs:
       md-changed-files:  ${{ steps.changed-files-md.outputs.all_changed_files }}
       md-any-changed:    ${{ steps.changed-files-md.outputs.any_changed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
@@ -43,7 +43,7 @@ jobs:
         ubuntu-release: [ '20.04', '22.04' ]
     runs-on: ubuntu-${{ matrix.ubuntu-release }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: syntax
         uses: ./
         with:
@@ -57,7 +57,7 @@ jobs:
         ubuntu-release: [ '20.04', '22.04' ]
     runs-on: ubuntu-${{ matrix.ubuntu-release }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: syntax
         uses: ./
         with:
@@ -68,7 +68,7 @@ jobs:
     if:    needs.list-files.outputs.sh-any-changed == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Check syntax
         uses: ./
         with:
@@ -82,7 +82,7 @@ jobs:
     if:   needs.list-files.outputs.md-any-changed == 'true'
     needs: list-files
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0

@@ -58,14 +58,14 @@ Or you can install all "missing" shells in a single command
 ### Simple install (check all files named .sh)
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@b3b4b1a
 - uses: Klintrup/simple-shell-syntax-check@v2
 ```
 
 ### Install fish before running action
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@b3b4b1a
 - run: sudo apt-get install -y fish
 - uses: Klintrup/simple-shell-syntax-check@v2
 ```
@@ -73,7 +73,7 @@ Or you can install all "missing" shells in a single command
 ### Only validate files if changed (for pull request)
 
 ```yaml
-- uses: actions/checkout@v4
+- uses: actions/checkout@b3b4b1a
   with:
     ref: ${{ github.head_ref }}
     fetch-depth: 0
