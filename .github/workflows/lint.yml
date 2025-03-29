@@ -40,8 +40,8 @@ jobs:
     strategy:
       matrix:
         # https://github.com/actions/runner-images
-        ubuntu-release: [ '20.04', '22.04', '24.04' ]
-    runs-on: ubuntu-${{ matrix.ubuntu-release }}
+        release: [ 'ubuntu-20.04', 'ubuntu-22.04', 'ubuntu-24.04' ]
+    runs-on: ${{ matrix.ubuntu-release }}
     steps:
       - uses: actions/checkout@v4
       - name: syntax
@@ -54,8 +54,8 @@ jobs:
     strategy:
       matrix:
         # https://github.com/actions/runner-images
-        ubuntu-release: [ '20.04', '22.04', '24.04' ]
-    runs-on: ubuntu-${{ matrix.ubuntu-release }}
+        release: [ 'ubuntu-20.04', 'ubuntu-22.04', 'ubuntu-24.04' ]
+    runs-on: ${{ matrix.release }}
     steps:
       - uses: actions/checkout@v4
       - name: syntax
