@@ -1,0 +1,29 @@
+name: SonarQube Analysis
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions: 
+  contents: read # Required for SonarQube to read the code
+  issues: write # Required for SonarQube to create issues
+  pull-requests: write # Required for SonarQube to create PR comments
+  security-events: write # Required for SonarQube to upload SARIF results
+  actions: read # Required for SonarQube to get the Action run status
+  checks: write # Required for SonarQube to create checks
+  statuses: write # Required for SonarQube to create statuses
+  deployments: write # Required for SonarQube to create deployments
+
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@aa494459d7c39c106cc77b166de8b4250a32bb97 # v5.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
