@@ -87,6 +87,6 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
       - name: Prettify code
-        uses: creyD/prettier_action@v4.3
+        uses: creyD/prettier_action@v4.6
         with:
           prettier_options: --write ${{ needs.list-files.outputs.md-changed-files }}
