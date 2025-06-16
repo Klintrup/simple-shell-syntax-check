@@ -6,6 +6,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+# Override default repository permissions to restrict access
 permissions: {}
 
 jobs:
