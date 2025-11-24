@@ -19,7 +19,7 @@ jobs:
       md-changed-files: ${{ steps.changed-files-md.outputs.all_changed_files }}
       md-any-changed: ${{ steps.changed-files-md.outputs.any_changed }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
@@ -43,7 +43,7 @@ jobs:
         ubuntu-release: ["22.04", "24.04"]
     runs-on: ubuntu-${{ matrix.ubuntu-release }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
       - name: syntax
         uses: ./
         with:
@@ -57,7 +57,7 @@ jobs:
         ubuntu-release: ["22.04", "24.04"]
     runs-on: ubuntu-${{ matrix.ubuntu-release }}
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
       - name: syntax
         uses: ./
         with:
@@ -68,7 +68,7 @@ jobs:
     if: needs.list-files.outputs.sh-any-changed == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
       - name: Check syntax
         uses: ./
         with:
@@ -82,7 +82,7 @@ jobs:
     if: needs.list-files.outputs.md-any-changed == 'true'
     needs: list-files
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
